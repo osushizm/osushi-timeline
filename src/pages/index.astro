@@ -17,10 +17,11 @@ const iso = (d: Date) => `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pa
 const excerpt = latest ? latest.body!.replace(/[#>*`\n]/g, ' ').trim().slice(0, 90) + '…' : '';
 ---
 <Base current="home" updated={now.updated}>
+  <div class="now-grid">
   {now.sections.map((section) => <Section section={section} />)}
 
   {latest && (
-    <section class="block">
+    <section class="block sec-diary">
       <SectionHead icon="📝" title="さいきんの日記" en="DIARY" />
       <div class="diary-card">
         <time datetime={iso(latest.data.date)}>{fmt(latest.data.date)}</time>
@@ -32,4 +33,5 @@ const excerpt = latest ? latest.body!.replace(/[#>*`\n]/g, ' ').trim().slice(0, 
       </div>
     </section>
   )}
+  </div>
 </Base>

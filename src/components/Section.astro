@@ -21,7 +21,7 @@ const registry: Record<string, any> = {
 const Body = registry[section?.type];
 ---
 {Body && (
-  <section class="block">
+  <section class={`block sec-${section.type}`}>
     <SectionHead icon={section.icon} title={section.title} en={section.en} />
     <Body section={section} />
   </section>

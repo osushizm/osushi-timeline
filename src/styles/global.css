@@ -221,3 +221,29 @@ section.block{margin-top:40px}
 
 footer.site{margin-top:56px;text-align:center;font-size:11.5px;color:#B5A28D;letter-spacing:.06em}
 footer.site .plates{font-size:16px;letter-spacing:.4em;margin-bottom:6px}
+
+/* ── ワイド画面:2カラムのダッシュボード配置 ── */
+@media (min-width: 1080px){
+  .wrap{max-width:1100px}
+  .now-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    column-gap:28px;
+    grid-auto-flow:dense;
+    align-items:start;
+  }
+  /* 横幅いっぱい使うセクション */
+  .now-grid .sec-dishes,
+  .now-grid .sec-piles,
+  .now-grid .sec-diary{grid-column:1 / -1}
+  /* お品書きはワイド時4枚横並び */
+  .sec-dishes .menu-grid{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+  /* 片側カラムに収まるセクション */
+  .now-grid .sec-ranks,
+  .now-grid .sec-keyword,
+  .now-grid .sec-tags,
+  .now-grid .sec-links{grid-column:auto / span 1}
+  .sec-ranks .ranks{grid-template-columns:1fr}
+  /* キーワードカードの余白をカラム内で整える */
+  .now-grid .keyword{padding:30px 20px}
+}

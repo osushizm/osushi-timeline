@@ -12,7 +12,9 @@ const { date } = Astro.params;
 ---
 <Base title={`${date} のスナップショット | お寿司のタイムライン`} current="archive">
   <div class="archive-banner">🗄️ これは {date} 時点のスナップショットです</div>
+  <div class="now-grid">
   {(snapshot.sections ?? []).map((section: any) => <Section section={section} />)}
+  </div>
   <section class="block" style="text-align:center">
     <a class="diary-more" href="/archive/">→ アーカイブ一覧にもどる</a>
   </section>
