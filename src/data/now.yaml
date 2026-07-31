@@ -13,9 +13,11 @@ sections:
     en: NOW
     icon: "📖"
     items:
+      # url: を足すとカード全体がリンクになり、クリックで新しいタブへ飛びます(省略可)
       - label: "📘 いま読んでる参考書"
         value: "Kubernetes完全ガイド 第2版"
         note: "3章・ネットワークまわりを反復中"
+        # url: "https://example.com/xxx"
       - label: "📕 いま読んでる小説"
         value: "三体Ⅱ 黒暗森林(上)"
         note: "寝る前にちょっとずつ"

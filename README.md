@@ -73,6 +73,17 @@ pushすれば個別ページ・バックログ・カレンダーの🍣がすべ
 `now.yaml` の該当セクションの `items:` に要素を足すだけ。コード変更は不要。
 ランクの `color` は iron / bronze / silver / gold / plat / emerald / diamond / master。
 
+### お品書き(dishes)の項目をリンクにする
+`dishes` の各アイテムに `url:` を足すと、カード全体がリンクになりクリックで
+新しいタブへ飛ぶようになります(省略すればこれまで通りただのカード)。
+
+```yaml
+- label: "📘 いま読んでる参考書"
+  value: "Kubernetes完全ガイド 第2版"
+  note: "3章・ネットワークまわりを反復中"
+  url: "https://example.com/xxx"   # 省略可
+```
+
 ### セクションごと増やす
 既存typeの使い回しなら `sections:` に新しいブロックを書くだけ
 (例: `type: dishes` で「今聴いてる音楽」セクションを作る、など)。
