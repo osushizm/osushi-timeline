@@ -222,12 +222,15 @@ section.block{margin-top:40px}
 footer.site{margin-top:56px;text-align:center;font-size:11.5px;color:#B5A28D;letter-spacing:.06em}
 footer.site .plates{font-size:16px;letter-spacing:.4em;margin-bottom:6px}
 
-/* ── ワイド画面:2カラムのダッシュボード配置 ── */
+/* ── ワイド画面:画面幅に合わせた流体レイアウト ── */
+/* コンテナは画面の92%まで伸びる(上限1560px)。
+   セクションは320pxを最小幅として「入るぶんだけ」カラムが増える:
+   ノートPCで2列、フルHDで3列、ウルトラワイドで4列、と自動で追従する。 */
 @media (min-width: 1080px){
-  .wrap{max-width:1100px}
+  .wrap{max-width:min(92vw, 1560px)}
   .now-grid{
     display:grid;
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:repeat(auto-fit, minmax(320px, 1fr));
     column-gap:28px;
     grid-auto-flow:dense;
     align-items:start;
@@ -236,14 +239,13 @@ footer.site .plates{font-size:16px;letter-spacing:.4em;margin-bottom:6px}
   .now-grid .sec-dishes,
   .now-grid .sec-piles,
   .now-grid .sec-diary{grid-column:1 / -1}
-  /* お品書きはワイド時4枚横並び */
-  .sec-dishes .menu-grid{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
-  /* 片側カラムに収まるセクション */
-  .now-grid .sec-ranks,
-  .now-grid .sec-keyword,
-  .now-grid .sec-tags,
-  .now-grid .sec-links{grid-column:auto / span 1}
+  /* お品書き・積読も入るぶんだけ横に並ぶ */
+  .sec-dishes .menu-grid{grid-template-columns:repeat(auto-fit, minmax(240px, 1fr))}
+  .sec-piles .tsundoku{grid-template-columns:repeat(auto-fit, minmax(300px, 1fr))}
   .sec-ranks .ranks{grid-template-columns:1fr}
-  /* キーワードカードの余白をカラム内で整える */
   .now-grid .keyword{padding:30px 20px}
+  /* 日記の本文は広げすぎると読みにくいので、カード自体は中央で上限を持つ */
+  .sec-diary .diary-card{max-width:920px;margin-inline:auto}
+  /* レーンの寿司の間隔も画面幅にあわせて広がる */
+  .lane-track{gap:clamp(34px, 3vw, 64px)}
 }
