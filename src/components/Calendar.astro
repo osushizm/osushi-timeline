@@ -1,0 +1,69 @@
+---
+// クライアント側で「今の月」を計算して描画するカレンダー。
+// ビルドし直さなくても月が変われば自動で追従する。
+// 日記のある日は /diary-dates.json を参照して 🍣 を置く。
+---
+<div class="cal" id="osushi-cal">
+  <div class="cal-nav">
+    <button type="button" data-cal-prev aria-label="前の月">←</button>
+    <span class="cal-title" data-cal-title></span>
+    <button type="button" data-cal-next aria-label="次の月">→</button>
+  </div>
+  <table>
+    <thead>
+      <tr><th>日</th><th>月</th><th>火</th><th>水</th><th>木</th><th>金</th><th>土</th></tr>
+    </thead>
+    <tbody data-cal-body></tbody>
+  </table>
+</div>
+<script>
+  const root = document.getElementById('osushi-cal');
+  if (root) {
+    const titleEl = root.querySelector('[data-cal-title]') as HTMLElement;
+    const bodyEl = root.querySelector('[data-cal-body]') as HTMLElement;
+    const now = new Date();
+    let year = now.getFullYear();
+    let month = now.getMonth(); // 0-11
+    let diaryDates = new Set<string>();
+
+    const pad = (n: number) => String(n).padStart(2, '0');
+
+    function render() {
+      titleEl.textContent = `${year}年${month + 1}月`;
+      const first = new Date(year, month, 1);
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const startDow = first.getDay();
+      const today = new Date();
+      const isThisMonth = today.getFullYear() === year && today.getMonth() === month;
+
+      let html = '<tr>';
+      for (let i = 0; i < startDow; i++) html += '<td></td>';
+      for (let d = 1; d <= daysInMonth; d++) {
+        const dow = (startDow + d - 1) % 7;
+        if (dow === 0 && d !== 1) html += '</tr><tr>';
+        const iso = `${year}-${pad(month + 1)}-${pad(d)}`;
+        const classes = [
+          diaryDates.has(iso) ? 'write' : '',
+          isThisMonth && today.getDate() === d ? 'today' : '',
+        ].filter(Boolean).join(' ');
+        const inner = diaryDates.has(iso) ? `<a href="/diary/${iso}/">${d}</a>` : String(d);
+        html += `<td class="${classes}">${inner}</td>`;
+      }
+      html += '</tr>';
+      bodyEl.innerHTML = html;
+    }
+
+    root.querySelector('[data-cal-prev]')?.addEventListener('click', () => {
+      month--; if (month < 0) { month = 11; year--; } render();
+    });
+    root.querySelector('[data-cal-next]')?.addEventListener('click', () => {
+      month++; if (month > 11) { month = 0; year++; } render();
+    });
+
+    render();
+    fetch('/diary-dates.json')
+      .then((r) => r.json())
+      .then((dates: string[]) => { diaryDates = new Set(dates); render(); })
+      .catch(() => {});
+  }
+</script>

@@ -1,0 +1,223 @@
+:root{
+  --shari:#FFF8EE;
+  --nori:#4A3B33;
+  --salmon:#FF9A8C;
+  --tamago:#FFD883;
+  --wasabi:#A9CF8E;
+  --ocean:#9CC6E0;
+  --plate:#FFFFFF;
+  --plate-shadow: 0 4px 14px rgba(122,90,60,.10);
+  --rim:#F2E4D3;
+  --radius:22px;
+  --maru:'Kiwi Maru','Hiragino Maru Gothic ProN','Zen Maru Gothic','Yu Gothic',sans-serif;
+  --body:'Zen Maru Gothic','Hiragino Maru Gothic ProN','Yu Gothic',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--shari);
+  color:var(--nori);
+  font-family:var(--body);
+  line-height:1.75;
+  font-size:15px;
+}
+a{color:inherit}
+.wrap{max-width:760px;margin:0 auto;padding:0 18px 80px}
+
+/* ── ヘッダー ── */
+header.site{padding:40px 0 8px;text-align:center}
+.site-title{
+  font-family:var(--maru);font-weight:500;
+  font-size:clamp(24px,6vw,34px);letter-spacing:.06em;
+}
+.site-title a{text-decoration:none}
+.tagline{margin-top:6px;font-size:13px;color:#93816F;letter-spacing:.08em}
+.updated{
+  display:inline-block;margin-top:12px;
+  font-size:11.5px;color:#A08B76;
+  background:#FBF0DF;border-radius:999px;padding:3px 14px;
+}
+nav.global{
+  margin-top:14px;display:flex;justify-content:center;gap:8px;flex-wrap:wrap;
+}
+nav.global a{
+  font-size:12.5px;text-decoration:none;color:#8A7259;
+  background:var(--plate);border:1.5px solid var(--rim);
+  border-radius:999px;padding:5px 16px;
+  box-shadow:var(--plate-shadow);
+}
+nav.global a[aria-current="page"]{
+  background:#FFE9E4;border-color:#F6C9BF;color:#C46A57;
+}
+
+/* ── 回転レーン ── */
+.lane{
+  margin:24px -18px 8px;
+  background:linear-gradient(#F6E8D4,#F1DFC6);
+  border-top:3px solid #EAD8BE;
+  border-bottom:3px solid #EAD8BE;
+  overflow:hidden;padding:10px 0;
+}
+.lane-track{
+  display:flex;gap:34px;width:max-content;
+  animation:belt 28s linear infinite;font-size:24px;
+}
+.lane-track span{filter:drop-shadow(0 2px 2px rgba(122,90,60,.15))}
+@keyframes belt{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion: reduce){.lane-track{animation:none}}
+
+/* ── セクション共通 ── */
+section.block{margin-top:40px}
+.sec-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.sec-head .icon{
+  width:34px;height:34px;border-radius:50%;
+  display:grid;place-items:center;font-size:17px;
+  background:var(--plate);box-shadow:var(--plate-shadow);
+}
+.sec-head h2{font-family:var(--maru);font-weight:500;font-size:18px;letter-spacing:.06em}
+.sec-head .en{font-size:10.5px;color:#B5A28D;letter-spacing:.18em;margin-left:auto}
+
+/* ── dishes ── */
+.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.menu-grid{grid-template-columns:1fr}}
+.dish{
+  background:var(--plate);border:1.5px solid var(--rim);
+  border-radius:var(--radius);box-shadow:var(--plate-shadow);
+  padding:16px 18px 14px;
+}
+.dish .label{font-size:11px;letter-spacing:.14em;color:#B5866E}
+.dish .value{margin-top:6px;font-family:var(--maru);font-weight:500;font-size:16px;line-height:1.5}
+.dish .note{margin-top:4px;font-size:12px;color:#A08B76}
+
+/* ── ranks ── */
+.ranks{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.ranks{grid-template-columns:1fr}}
+.rank-plate{
+  background:var(--plate);border-radius:var(--radius);
+  box-shadow:var(--plate-shadow);padding:16px 18px;
+  display:flex;align-items:center;gap:14px;
+  border:2.5px solid var(--rim);
+}
+.rank-plate .game-icon{
+  width:44px;height:44px;border-radius:50%;
+  display:grid;place-items:center;font-size:22px;background:#FDF3E3;
+}
+.rank-plate .game{font-size:12px;color:#A08B76;letter-spacing:.06em}
+.rank-plate .tier{font-family:var(--maru);font-weight:500;font-size:17px}
+.rank-plate .dot{
+  display:inline-block;width:9px;height:9px;border-radius:50%;
+  margin-right:6px;transform:translateY(-1px);background:var(--rim);
+}
+.rank-plate.rim-iron{border-color:#8D8680}.rank-plate.rim-iron .dot{background:#8D8680}
+.rank-plate.rim-bronze{border-color:#C89165}.rank-plate.rim-bronze .dot{background:#C89165}
+.rank-plate.rim-silver{border-color:#B9C2CE}.rank-plate.rim-silver .dot{background:#B9C2CE}
+.rank-plate.rim-gold{border-color:#E4BE62}.rank-plate.rim-gold .dot{background:#E4BE62}
+.rank-plate.rim-plat{border-color:#66C6BF}.rank-plate.rim-plat .dot{background:#66C6BF}
+.rank-plate.rim-emerald{border-color:#5DBB7E}.rank-plate.rim-emerald .dot{background:#5DBB7E}
+.rank-plate.rim-diamond{border-color:#7FA8F0}.rank-plate.rim-diamond .dot{background:#7FA8F0}
+.rank-plate.rim-master{border-color:#B48AE0}.rank-plate.rim-master .dot{background:#B48AE0}
+
+/* ── keyword ── */
+.keyword{
+  background:linear-gradient(135deg,#FFE9E4,#FFF3D9);
+  border-radius:var(--radius);padding:22px 20px;text-align:center;
+  box-shadow:var(--plate-shadow);
+}
+.keyword .kw{font-family:var(--maru);font-weight:500;font-size:clamp(20px,5vw,26px);letter-spacing:.08em}
+.keyword .kw::before{content:"「"}.keyword .kw::after{content:"」"}
+.keyword p{margin-top:6px;font-size:12.5px;color:#A0846E}
+
+/* ── tags ── */
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{
+  background:#EFF6E8;color:#5C7A48;border:1.5px solid #D8E8C8;
+  border-radius:999px;padding:5px 14px;font-size:13px;
+}
+
+/* ── piles ── */
+.tsundoku{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.tsundoku{grid-template-columns:1fr}}
+.pile{
+  background:var(--plate);border:1.5px solid var(--rim);
+  border-radius:var(--radius);box-shadow:var(--plate-shadow);
+  padding:16px 18px;
+}
+.pile h3{
+  font-family:var(--maru);font-weight:500;font-size:14px;
+  display:flex;align-items:center;gap:7px;margin-bottom:8px;
+}
+.pile .count{margin-left:auto;font-size:11px;color:#B5A28D;font-weight:400}
+.pile ul{list-style:none}
+.pile li{padding:7px 0;font-size:13.5px;border-top:1px dashed #EFE2D0}
+.pile li:first-child{border-top:none}
+.pile a{color:#4E7FA6;text-decoration:none;border-bottom:1px dotted #9CC6E0}
+
+/* ── links ── */
+.links{display:grid;gap:10px}
+.link-item{
+  display:flex;align-items:center;gap:12px;
+  background:var(--plate);border:1.5px solid var(--rim);
+  border-radius:16px;box-shadow:var(--plate-shadow);
+  padding:12px 16px;text-decoration:none;
+  transition:transform .15s ease;
+}
+.link-item:hover{transform:translateY(-2px)}
+.link-item .li-icon{
+  width:36px;height:36px;border-radius:50%;
+  display:grid;place-items:center;font-size:17px;background:#FDF3E3;
+}
+.link-item .li-title{font-size:14px;font-weight:500}
+.link-item .li-url{font-size:11px;color:#B5A28D}
+.link-item .arrow{margin-left:auto;color:#D9C6AE;font-size:14px}
+
+/* ── 日記 ── */
+.diary-card{
+  background:var(--plate);border:1.5px solid var(--rim);
+  border-radius:var(--radius);box-shadow:var(--plate-shadow);
+  padding:18px 20px;
+}
+.diary-card time{font-size:12px;color:#B5866E;letter-spacing:.08em}
+.diary-card h3, .diary-card h1{font-family:var(--maru);font-weight:500;font-size:16px;margin:4px 0 8px}
+.diary-card .excerpt{font-size:13.5px;color:#6B584A}
+.diary-more{display:inline-block;margin-top:10px;font-size:12.5px;color:#C46A57;text-decoration:none}
+.diary-list{list-style:none;display:grid;gap:10px}
+.diary-list a{
+  display:block;background:var(--plate);border:1.5px solid var(--rim);
+  border-radius:16px;box-shadow:var(--plate-shadow);
+  padding:12px 16px;text-decoration:none;
+}
+.diary-list time{font-size:11.5px;color:#B5866E}
+.diary-list .dt{font-family:var(--maru);font-weight:500;font-size:15px}
+.diary-body{font-size:14px;color:#5C4B3E}
+.diary-body p{margin:12px 0}
+.diary-body h2,.diary-body h3{font-family:var(--maru);font-weight:500;margin:18px 0 6px}
+.diary-body a{color:#4E7FA6}
+
+/* ── カレンダー ── */
+.cal{
+  background:#FFFDF8;border:1.5px solid var(--rim);border-radius:16px;
+  padding:14px 14px 10px;margin-top:14px;
+}
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.cal-nav button{
+  border:none;background:#FDF3E3;border-radius:8px;
+  padding:2px 10px;cursor:pointer;font-family:var(--body);color:#8A7259;font-size:13px;
+}
+.cal-title{font-size:12px;color:#A08B76;letter-spacing:.1em}
+.cal table{width:100%;border-collapse:collapse;table-layout:fixed}
+.cal th{font-size:10px;color:#C4B29C;font-weight:400;padding-bottom:4px}
+.cal td{text-align:center;font-size:11.5px;color:#8A7663;padding:4px 0;height:34px;vertical-align:top}
+.cal td.write a{text-decoration:none;color:inherit;display:block}
+.cal td.write a::after{content:"🍣";font-size:10px;display:block;line-height:1}
+.cal td.today{background:#FFE9E4;border-radius:10px;font-weight:700;color:#C46A57}
+
+/* ── アーカイブ ── */
+.archive-banner{
+  background:#FDF3E3;border:1.5px dashed #E5CFA9;border-radius:16px;
+  padding:10px 16px;font-size:13px;color:#8A7259;
+  text-align:center;margin-top:20px;
+}
+.archive-list{list-style:none;display:grid;gap:10px}
+
+footer.site{margin-top:56px;text-align:center;font-size:11.5px;color:#B5A28D;letter-spacing:.06em}
+footer.site .plates{font-size:16px;letter-spacing:.4em;margin-bottom:6px}

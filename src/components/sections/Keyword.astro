@@ -1,0 +1,7 @@
+---
+const { section } = Astro.props;
+---
+<div class="keyword">
+  <div class="kw">{section.word}</div>
+  {section.note && <p>{section.note}</p>}
+</div>

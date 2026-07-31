@@ -1,0 +1,28 @@
+---
+// セクションディスパッチャ:type に応じて描画コンポーネントを切り替える。
+// 未知の type は黙ってスキップするので、古いスナップショットも新しい項目も壊れない。
+import SectionHead from './SectionHead.astro';
+import Dishes from './sections/Dishes.astro';
+import Ranks from './sections/Ranks.astro';
+import Keyword from './sections/Keyword.astro';
+import Tags from './sections/Tags.astro';
+import Piles from './sections/Piles.astro';
+import Links from './sections/Links.astro';
+
+const { section } = Astro.props;
+const registry: Record<string, any> = {
+  dishes: Dishes,
+  ranks: Ranks,
+  keyword: Keyword,
+  tags: Tags,
+  piles: Piles,
+  links: Links,
+};
+const Body = registry[section?.type];
+---
+{Body && (
+  <section class="block">
+    <SectionHead icon={section.icon} title={section.title} en={section.en} />
+    <Body section={section} />
+  </section>
+)}

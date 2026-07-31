@@ -1,0 +1,93 @@
+# ============================================================
+# お寿司のタイムライン — 「今」のデータ
+# このファイルを書き換えて push するだけでサイトが更新されます。
+# セクションの順番を入れ替えれば表示順も変わります。
+# 使えるセクション type: dishes / ranks / keyword / tags / piles / links
+# ============================================================
+
+updated: "2026-07-31"
+
+sections:
+  - type: dishes
+    title: いまのお品書き
+    en: NOW
+    icon: "📖"
+    items:
+      - label: "📘 いま読んでる参考書"
+        value: "Kubernetes完全ガイド 第2版"
+        note: "3章・ネットワークまわりを反復中"
+      - label: "📕 いま読んでる小説"
+        value: "三体Ⅱ 黒暗森林(上)"
+        note: "寝る前にちょっとずつ"
+      - label: "🎮 いまのストーリーゲーム"
+        value: "十三機兵防衛圏"
+        note: "時系列がぐちゃぐちゃで最高"
+      - label: "🕹️ いまのメインゲーム"
+        value: "VALORANT"
+        note: "ナイフスキン鑑賞も継続中"
+
+  - type: ranks
+    title: いまのランク
+    en: RANKS
+    icon: "🏅"
+    items:
+      - game: "VALORANT"
+        tier: "ゴールド 2"
+        color: gold        # iron/bronze/silver/gold/plat/emerald/diamond/master
+        icon: "🔫"
+      - game: "League of Legends"
+        tier: "シルバー 1"
+        color: silver
+        icon: "⚔️"
+
+  - type: keyword
+    title: 今週のキーワード
+    en: KEYWORD
+    icon: "💭"
+    word: "おうちクラウド"
+    note: "旧PCをProxmoxサーバにする計画が進行中"
+
+  - type: tags
+    title: 勉強してる分野
+    en: STUDYING
+    icon: "✏️"
+    items:
+      - Kubernetes
+      - コンテナネットワーク
+      - 仮想化基盤
+      - Cloudflare
+
+  - type: piles
+    title: 積読のやま
+    en: TSUNDOKU
+    icon: "🗻"
+    items:
+      - heading: "📚 積んでる本"
+        entries:
+          - text: "マスタリングTCP/IP 情報セキュリティ編"
+          - text: "プロジェクト・ヘイル・メアリー(下)"
+          - text: "ふつうのLinuxプログラミング"
+      - heading: "🔖 あとで読むURL"
+        entries:
+          - text: "eBPFでネットワークを覗く話"
+            url: "https://example.com/ebpf"
+          - text: "Cloudflare Workersの新機能まとめ"
+            url: "https://example.com/workers"
+
+  - type: links
+    title: お寿司のリンク
+    en: LINKS
+    icon: "🔗"
+    items:
+      - title: "時すでにお寿司"
+        note: "youtube.com/@osushizm"
+        url: "https://youtube.com/@osushizm"
+        icon: "📺"
+      - title: "GitHub"
+        note: "github.com/…"
+        url: "https://github.com"
+        icon: "🐙"
+      - title: "RANDOM RIFT"
+        note: "LoLカスタムゲームランダマイザ"
+        url: "https://example.com"
+        icon: "🎲"

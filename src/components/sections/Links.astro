@@ -1,0 +1,15 @@
+---
+const { section } = Astro.props;
+---
+<div class="links">
+  {(section.items ?? []).map((l: any) => (
+    <a class="link-item" href={l.url} target="_blank" rel="noopener">
+      <span class="li-icon">{l.icon ?? '🔗'}</span>
+      <span>
+        <span class="li-title">{l.title}</span><br />
+        {l.note && <span class="li-url">{l.note}</span>}
+      </span>
+      <span class="arrow">→</span>
+    </a>
+  ))}
+</div>

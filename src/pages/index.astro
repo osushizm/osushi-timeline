@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+import Section from '../components/Section.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Calendar from '../components/Calendar.astro';
+import { loadNow } from '../lib/data';
+import { getCollection } from 'astro:content';
+
+const now = loadNow();
+const entries = (await getCollection('diary')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+const latest = entries[0];
+const pad = (n: number) => String(n).padStart(2, '0');
+const fmt = (d: Date) => `${d.getUTCFullYear()}.${pad(d.getUTCMonth() + 1)}.${pad(d.getUTCDate())}`;
+const iso = (d: Date) => `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`;
+const excerpt = latest ? latest.body!.replace(/[#>*`\n]/g, ' ').trim().slice(0, 90) + '…' : '';
+---
+<Base current="home" updated={now.updated}>
+  {now.sections.map((section) => <Section section={section} />)}
+
+  {latest && (
+    <section class="block">
+      <SectionHead icon="📝" title="さいきんの日記" en="DIARY" />
+      <div class="diary-card">
+        <time datetime={iso(latest.data.date)}>{fmt(latest.data.date)}</time>
+        <h3>{latest.data.title}</h3>
+        <p class="excerpt">{excerpt}</p>
+        <a class="diary-more" href={`/diary/${latest.id}/`}>→ つづきを読む</a>
+        <a class="diary-more" href="/diary/" style="margin-left:12px">→ バックログ</a>
+        <Calendar />
+      </div>
+    </section>
+  )}
+</Base>

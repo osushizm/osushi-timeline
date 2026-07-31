@@ -1,0 +1,25 @@
+---
+import Base from '../../layouts/Base.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import { listArchives } from '../../lib/data';
+
+const archives = listArchives();
+---
+<Base title="アーカイブ | お寿司のタイムライン" current="archive">
+  <section class="block">
+    <SectionHead icon="🗄️" title="過去のお寿司" en="ARCHIVE" />
+    {archives.length === 0 && (
+      <div class="archive-banner">まだスナップショットがありません。最初の1皿はこれから。</div>
+    )}
+    <ul class="archive-list diary-list">
+      {archives.map((a) => (
+        <li>
+          <a href={`/archive/${a.date}/`}>
+            <time>{a.date}</time>
+            <div class="dt">この週のお寿司を見る</div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Base>

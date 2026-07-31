@@ -1,0 +1,14 @@
+---
+const { section } = Astro.props;
+---
+<div class="ranks">
+  {(section.items ?? []).map((item: any) => (
+    <div class={`rank-plate rim-${item.color ?? 'silver'}`}>
+      <span class="game-icon">{item.icon ?? '🎮'}</span>
+      <div>
+        <div class="game">{item.game}</div>
+        <div class="tier"><span class="dot"></span>{item.tier}</div>
+      </div>
+    </div>
+  ))}
+</div>

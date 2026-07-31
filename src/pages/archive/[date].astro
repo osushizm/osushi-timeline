@@ -1,0 +1,19 @@
+---
+import Base from '../../layouts/Base.astro';
+import Section from '../../components/Section.astro';
+import { listArchives } from '../../lib/data';
+
+export async function getStaticPaths() {
+  return listArchives().map((a) => ({ params: { date: a.date }, props: { snapshot: a.data } }));
+}
+
+const { snapshot } = Astro.props;
+const { date } = Astro.params;
+---
+<Base title={`${date} のスナップショット | お寿司のタイムライン`} current="archive">
+  <div class="archive-banner">🗄️ これは {date} 時点のスナップショットです</div>
+  {(snapshot.sections ?? []).map((section: any) => <Section section={section} />)}
+  <section class="block" style="text-align:center">
+    <a class="diary-more" href="/archive/">→ アーカイブ一覧にもどる</a>
+  </section>
+</Base>

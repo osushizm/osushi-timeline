@@ -1,0 +1,6 @@
+---
+const { section } = Astro.props;
+---
+<div class="tags">
+  {(section.items ?? []).map((t: string) => <span class="tag">{t}</span>)}
+</div>

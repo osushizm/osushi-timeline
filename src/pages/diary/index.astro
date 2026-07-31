@@ -1,0 +1,28 @@
+---
+import Base from '../../layouts/Base.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import Calendar from '../../components/Calendar.astro';
+import { getCollection } from 'astro:content';
+
+const entries = (await getCollection('diary')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+const pad = (n: number) => String(n).padStart(2, '0');
+const fmt = (d: Date) => `${d.getUTCFullYear()}.${pad(d.getUTCMonth() + 1)}.${pad(d.getUTCDate())}`;
+---
+<Base title="日記 | お寿司のタイムライン" current="diary">
+  <section class="block">
+    <SectionHead icon="📝" title="日記のバックログ" en="DIARY" />
+    <Calendar />
+    <ul class="diary-list" style="margin-top:14px">
+      {entries.map((e) => (
+        <li>
+          <a href={`/diary/${e.id}/`}>
+            <time>{fmt(e.data.date)}</time>
+            <div class="dt">{e.data.title}</div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Base>

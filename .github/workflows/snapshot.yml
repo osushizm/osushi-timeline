@@ -1,0 +1,24 @@
+# 毎週日曜 0:00 (JST) に now.yaml をアーカイブへスナップショットする
+name: weekly-snapshot
+on:
+  schedule:
+    - cron: '0 15 * * 6'   # 土曜15:00 UTC = 日曜 0:00 JST
+  workflow_dispatch: {}     # 手動実行も可
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Copy now.yaml to archive
+        run: |
+          DATE=$(TZ=Asia/Tokyo date +%F)
+          cp src/data/now.yaml "src/data/archive/${DATE}.yaml"
+      - name: Commit
+        run: |
+          git config user.name "osushi-bot"
+          git config user.email "actions@github.com"
+          git add src/data/archive/
+          git diff --cached --quiet || git commit -m "snapshot: $(TZ=Asia/Tokyo date +%F)"
+          git push

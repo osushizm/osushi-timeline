@@ -1,0 +1,9 @@
+---
+interface Props { icon?: string; title: string; en?: string }
+const { icon = '🍣', title, en } = Astro.props;
+---
+<div class="sec-head">
+  <span class="icon">{icon}</span>
+  <h2>{title}</h2>
+  {en && <span class="en">{en}</span>}
+</div>

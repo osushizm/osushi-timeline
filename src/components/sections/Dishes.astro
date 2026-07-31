@@ -1,0 +1,12 @@
+---
+const { section } = Astro.props;
+---
+<div class="menu-grid">
+  {(section.items ?? []).map((item: any) => (
+    <div class="dish">
+      <div class="label">{item.label}</div>
+      <div class="value">{item.value}</div>
+      {item.note && <div class="note">{item.note}</div>}
+    </div>
+  ))}
+</div>
