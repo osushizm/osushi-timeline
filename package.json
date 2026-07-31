@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
-    "count:chars": "node scripts/count-chars.mjs"
+    "preview": "astro preview"
   },
   "dependencies": {
     "astro": "^5.12.0",

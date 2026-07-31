@@ -214,30 +214,6 @@ a.dish:hover{transform:translateY(-2px)}
 .cal td.write a::after{content:"🍣";font-size:10px;display:block;line-height:1}
 .cal td.today{background:#FFE9E4;border-radius:10px;font-weight:700;color:#C46A57}
 
-/* ── 執筆量統計 ── */
-.stats-note{font-size:clamp(13px, 0.08vw + 12.7px, 13.5px);color:#8A7663;margin-bottom:18px}
-.stats-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
-@media (max-width:520px){.stats-cards{grid-template-columns:1fr}}
-.stat-card{
-  background:var(--plate);border:1.5px solid var(--rim);
-  border-radius:var(--radius);box-shadow:var(--plate-shadow);
-  padding:16px 18px;text-align:center;
-}
-.stat-label{font-size:clamp(11.5px, 0.08vw + 11.2px, 12px);color:#B5866E;letter-spacing:.06em}
-.stat-value{margin-top:6px;font-family:var(--maru);font-weight:500;font-size:clamp(20px, 0.3vw + 18.8px, 22px);color:var(--nori)}
-.stat-value .unit{margin-left:2px;font-size:12px;font-weight:400;color:#A08B76}
-.stats-chart{
-  background:var(--plate);border:1.5px solid var(--rim);
-  border-radius:var(--radius);box-shadow:var(--plate-shadow);
-  padding:16px;
-}
-.stats-chart svg{width:100%;height:auto;display:block}
-.stats-chart .grid-line{stroke:#EFE2D0;stroke-width:1}
-.stats-chart .axis-label{font-size:10.5px;fill:#B5A28D;font-family:var(--body)}
-.stats-chart .chart-area{fill:var(--wasabi);opacity:.15}
-.stats-chart .chart-line{fill:none;stroke:var(--wasabi);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
-.stats-chart .chart-dot{fill:var(--wasabi);stroke:var(--plate);stroke-width:2}
-
 /* ── アーカイブ ── */
 .archive-banner{
   background:#FDF3E3;border:1.5px dashed #E5CFA9;border-radius:16px;

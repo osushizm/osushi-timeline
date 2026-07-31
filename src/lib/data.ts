@@ -14,20 +14,6 @@ export function loadNow(): NowData {
   return yaml.load(raw) as NowData;
 }
 
-export interface WritingStatPoint {
-  date: string;
-  totalChars: number;
-  fileCount: number;
-}
-
-export function loadWritingStats(): WritingStatPoint[] {
-  const file = path.join(DATA_DIR, 'writing-stats.json');
-  if (!fs.existsSync(file)) return [];
-  return (JSON.parse(fs.readFileSync(file, 'utf-8')) as WritingStatPoint[]).sort((a, b) =>
-    a.date < b.date ? -1 : 1
-  );
-}
-
 export function listArchives(): { date: string; data: NowData }[] {
   const dir = path.join(DATA_DIR, 'archive');
   if (!fs.existsSync(dir)) return [];
