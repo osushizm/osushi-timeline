@@ -16,7 +16,11 @@ const fmt = (d: Date) => `${d.getUTCFullYear()}.${pad(d.getUTCMonth() + 1)}.${pa
 const iso = (d: Date) => `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`;
 const excerpt = latest ? latest.body!.replace(/[#>*`\n]/g, ' ').trim().slice(0, 90) + '…' : '';
 ---
-<Base current="home" updated={now.updated}>
+<Base
+  current="home"
+  updated={now.updated}
+  description="お寿司の「今」がパッとわかるページ。読んでる本・ゲームのランク・積読・日記をまとめて流しています。"
+>
   <div class="now-grid">
   {now.sections.map((section) => <Section section={section} />)}
 

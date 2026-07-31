@@ -12,8 +12,9 @@ const { Content } = await render(entry);
 const pad = (n: number) => String(n).padStart(2, '0');
 const d = entry.data.date;
 const fmt = `${d.getUTCFullYear()}.${pad(d.getUTCMonth() + 1)}.${pad(d.getUTCDate())}`;
+const excerpt = entry.body!.replace(/[#>*`\n]/g, ' ').trim().slice(0, 90) + '…';
 ---
-<Base title={`${entry.data.title} | お寿司のタイムライン`} current="diary">
+<Base title={`${entry.data.title} | お寿司のタイムライン`} current="diary" description={excerpt}>
   <section class="block">
     <div class="diary-card">
       <time>{fmt}</time>

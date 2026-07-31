@@ -10,7 +10,7 @@ const entries = (await getCollection('diary')).sort(
 const pad = (n: number) => String(n).padStart(2, '0');
 const fmt = (d: Date) => `${d.getUTCFullYear()}.${pad(d.getUTCMonth() + 1)}.${pad(d.getUTCDate())}`;
 ---
-<Base title="日記 | お寿司のタイムライン" current="diary">
+<Base title="日記 | お寿司のタイムライン" current="diary" description="お寿司のタイムラインの日記バックログ一覧。カレンダーから日付を選んでも読めます。">
   <section class="block">
     <SectionHead icon="📝" title="日記のバックログ" en="DIARY" />
     <Calendar />

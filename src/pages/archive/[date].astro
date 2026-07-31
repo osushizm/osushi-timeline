@@ -10,7 +10,11 @@ export async function getStaticPaths() {
 const { snapshot } = Astro.props;
 const { date } = Astro.params;
 ---
-<Base title={`${date} のスナップショット | お寿司のタイムライン`} current="archive">
+<Base
+  title={`${date} のスナップショット | お寿司のタイムライン`}
+  current="archive"
+  description={`${date}時点の「今」のスナップショットです。`}
+>
   <div class="archive-banner">🗄️ これは {date} 時点のスナップショットです</div>
   <div class="now-grid">
   {(snapshot.sections ?? []).map((section: any) => <Section section={section} />)}

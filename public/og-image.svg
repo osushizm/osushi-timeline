@@ -1,0 +1,33 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="lane" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F6E8D4" />
+      <stop offset="1" stop-color="#F1DFC6" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="#FFF8EE" />
+
+  <rect x="0" y="0" width="1200" height="108" fill="url(#lane)" />
+  <rect x="0" y="104" width="1200" height="4" fill="#EAD8BE" />
+  <text x="0" y="78" font-size="56" font-family="sans-serif" letter-spacing="18">
+    🍣🍤🍙🍵🥢🍣🐟🍮🍣🍤🍙🍵🥢🍣🐟🍮🍣🍤🍙🍵🥢
+  </text>
+
+  <rect x="0" y="518" width="1200" height="4" fill="#EAD8BE" />
+  <rect x="0" y="522" width="1200" height="108" fill="url(#lane)" />
+  <text x="0" y="600" font-size="56" font-family="sans-serif" letter-spacing="18">
+    🍣🍤🍙🍵🥢🍣🐟🍮🍣🍤🍙🍵🥢🍣🐟🍮🍣🍤🍙🍵🥢
+  </text>
+
+  <text x="600" y="300" font-size="72" font-weight="700" font-family="sans-serif" fill="#4A3B33" text-anchor="middle">🍣 お寿司のタイムライン</text>
+  <text x="600" y="360" font-size="30" font-family="sans-serif" fill="#93816F" text-anchor="middle">── お寿司の「今」が流れてくるところ ──</text>
+
+  <circle cx="440" cy="430" r="14" fill="#FF9A8C" />
+  <circle cx="500" cy="430" r="14" fill="#FFD883" />
+  <circle cx="560" cy="430" r="14" fill="#A9CF8E" />
+  <circle cx="620" cy="430" r="14" fill="#9CC6E0" />
+  <circle cx="680" cy="430" r="14" fill="#FF9A8C" />
+  <circle cx="740" cy="430" r="14" fill="#FFD883" />
+  <circle cx="760" cy="430" r="14" fill="#A9CF8E" />
+</svg>

@@ -5,7 +5,7 @@ import { listArchives } from '../../lib/data';
 
 const archives = listArchives();
 ---
-<Base title="アーカイブ | お寿司のタイムライン" current="archive">
+<Base title="アーカイブ | お寿司のタイムライン" current="archive" description="過去の「今」を週ごとに振り返るスナップショット一覧。">
   <section class="block">
     <SectionHead icon="🗄️" title="過去のお寿司" en="ARCHIVE" />
     {archives.length === 0 && (
