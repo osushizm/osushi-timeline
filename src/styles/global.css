@@ -81,10 +81,13 @@ section.block{margin-top:40px}
 .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media (max-width:520px){.menu-grid{grid-template-columns:1fr}}
 .dish{
-  background:var(--plate);border:1.5px solid var(--rim);
+  display:block;background:var(--plate);border:1.5px solid var(--rim);
   border-radius:var(--radius);box-shadow:var(--plate-shadow);
   padding:17px 19px 15px;
+  text-decoration:none;color:inherit;
+  transition:transform .15s ease;
 }
+a.dish:hover{transform:translateY(-2px)}
 .dish .label{font-size:clamp(11.5px, 0.08vw + 11.2px, 12px);letter-spacing:.14em;color:#B5866E}
 .dish .value{margin-top:6px;font-family:var(--maru);font-weight:500;font-size:clamp(17px, 0.16vw + 16.4px, 18px);line-height:1.5}
 .dish .note{margin-top:4px;font-size:clamp(12.5px, 0.08vw + 12.2px, 13px);color:#A08B76}
