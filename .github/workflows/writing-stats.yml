@@ -1,0 +1,38 @@
+# push のたびに(と念のため毎日)執筆量(文字数)を集計してsrc/data/writing-stats.jsonへ記録する
+# STATS_PAT という名前でリポジトリ横断のread-only PATをsecret登録すると、
+# 他のprivateリポジトリ(gaslight-conspiracyなど)分も合算する
+name: writing-stats
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '20 19 * * *'   # 19:20 UTC = 4:20 JST
+  workflow_dispatch: {}
+jobs:
+  count:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Clone additional repos
+        if: ${{ secrets.STATS_PAT != '' }}
+        run: |
+          git clone --depth 1 "https://x-access-token:${{ secrets.STATS_PAT }}@github.com/osushizm/gaslight-conspiracy.git" ../gaslight-conspiracy
+
+      - name: Count characters
+        run: |
+          if [ -d "../gaslight-conspiracy" ]; then
+            node scripts/count-chars.mjs ../gaslight-conspiracy
+          else
+            node scripts/count-chars.mjs
+          fi
+
+      - name: Commit
+        run: |
+          git config user.name "osushi-bot"
+          git config user.email "actions@github.com"
+          git add src/data/writing-stats.json
+          git diff --cached --quiet || git commit -m "stats: $(TZ=Asia/Tokyo date +%F)"
+          git push

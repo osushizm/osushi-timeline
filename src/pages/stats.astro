@@ -1,0 +1,98 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import { loadWritingStats } from '../lib/data';
+
+const stats = loadWritingStats();
+const first = stats[0];
+const last = stats[stats.length - 1];
+const delta = first && last ? last.totalChars - first.totalChars : 0;
+
+const W = 640;
+const H = 220;
+const PAD_L = 52;
+const PAD_R = 16;
+const PAD_T = 16;
+const PAD_B = 28;
+
+const values = stats.map((s) => s.totalChars);
+const maxVal = values.length ? Math.max(...values) : 0;
+const minVal = values.length ? Math.min(...values) : 0;
+const range = maxVal - minVal || 1;
+
+function x(i: number) {
+  if (stats.length <= 1) return PAD_L;
+  return PAD_L + (i / (stats.length - 1)) * (W - PAD_L - PAD_R);
+}
+function y(v: number) {
+  return PAD_T + (1 - (v - minVal) / range) * (H - PAD_T - PAD_B);
+}
+
+const linePoints = stats.map((s, i) => `${x(i).toFixed(1)},${y(s.totalChars).toFixed(1)}`).join(' ');
+const areaPoints = stats.length
+  ? `${x(0).toFixed(1)},${(H - PAD_B).toFixed(1)} ${linePoints} ${x(stats.length - 1).toFixed(1)},${(H - PAD_B).toFixed(1)}`
+  : '';
+
+const hasVariance = maxVal !== minVal;
+const yTicks = hasVariance
+  ? [0, 0.5, 1].map((t) => ({
+      y: PAD_T + t * (H - PAD_T - PAD_B),
+      label: Math.round(maxVal - t * range).toLocaleString('ja-JP'),
+    }))
+  : [{ y: PAD_T + 0.5 * (H - PAD_T - PAD_B), label: maxVal.toLocaleString('ja-JP') }];
+---
+<Base title="執筆量 | お寿司のタイムライン" current="stats">
+  <section class="block">
+    <SectionHead icon="✍️" title="執筆量の推移" en="STATS" />
+    <p class="stats-note">
+      リポジトリ内のテキストファイルの合計文字数を、pushのたびに記録しています
+      (package-lock.jsonなど自動生成されるファイルは除く)。
+    </p>
+
+    <div class="stats-cards">
+      <div class="stat-card">
+        <div class="stat-label">現在の文字数</div>
+        <div class="stat-value">{(last?.totalChars ?? 0).toLocaleString('ja-JP')}<span class="unit">文字</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">記録日数</div>
+        <div class="stat-value">{stats.length}<span class="unit">日</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">記録開始からの増加</div>
+        <div class="stat-value">{delta >= 0 ? '+' : ''}{delta.toLocaleString('ja-JP')}<span class="unit">文字</span></div>
+      </div>
+    </div>
+
+    {stats.length === 0 ? (
+      <div class="archive-banner">まだ記録がありません。次のpushから集計がはじまります。</div>
+    ) : (
+      <div class="stats-chart">
+        <svg
+          viewBox={`0 0 ${W} ${H}`}
+          role="img"
+          aria-label={`文字数の推移。${first.date}に${first.totalChars.toLocaleString('ja-JP')}文字、${last.date}に${last.totalChars.toLocaleString('ja-JP')}文字。`}
+        >
+          {yTicks.map((t) => (
+            <line x1={PAD_L} x2={W - PAD_R} y1={t.y} y2={t.y} class="grid-line" />
+          ))}
+          {yTicks.map((t) => (
+            <text x={PAD_L - 8} y={t.y + 4} class="axis-label" text-anchor="end">{t.label}</text>
+          ))}
+          {areaPoints && <polygon points={areaPoints} class="chart-area" />}
+          {stats.length > 1 && <polyline points={linePoints} class="chart-line" />}
+          {stats.map((s, i) => (
+            <circle cx={x(i)} cy={y(s.totalChars)} r="4" class="chart-dot" />
+          ))}
+          <text x={x(0)} y={H - 8} class="axis-label" text-anchor="start">{first.date}</text>
+          {stats.length > 1 && (
+            <text x={x(stats.length - 1)} y={H - 8} class="axis-label" text-anchor="end">{last.date}</text>
+          )}
+        </svg>
+      </div>
+    )}
+    {stats.length === 1 && (
+      <p class="stats-note">記録はまだ1日分だけです。pushを重ねるとここに推移が育ちます。</p>
+    )}
+  </section>
+</Base>
