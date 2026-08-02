@@ -1,0 +1,86 @@
+---
+import Base from '../../layouts/Base.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import { getCollection, render } from 'astro:content';
+
+const CATEGORY_META: Record<string, { icon: string; label: string }> = {
+  game: { icon: '🎮', label: 'ゲーム' },
+  book: { icon: '📖', label: '本' },
+  movie: { icon: '🎬', label: '映画' },
+};
+function meta(category: string) {
+  return CATEGORY_META[category] ?? { icon: '🏷️', label: category };
+}
+
+const entries = (await getCollection('completed')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+const rendered = await Promise.all(
+  entries.map(async (e) => ({ entry: e, Content: (await render(e)).Content }))
+);
+const categories = [...new Set(entries.map((e) => e.data.category))];
+
+const pad = (n: number) => String(n).padStart(2, '0');
+const fmt = (d: Date) => `${d.getUTCFullYear()}.${pad(d.getUTCMonth() + 1)}.${pad(d.getUTCDate())}`;
+---
+<Base
+  title="実績 | お寿司のタイムライン"
+  current="completed"
+  description="クリアしたゲームや読んだ本、観た映画の記録と感想。"
+>
+  <section class="block">
+    <SectionHead icon="🏆" title="クリアした実績" en="COMPLETED" />
+
+    {entries.length === 0 ? (
+      <div class="archive-banner">
+        まだ記録がありません。templates/completed.md をコピーして最初の1件を追加してください。
+      </div>
+    ) : (
+      <>
+        <div class="completed-filters" data-completed-filters>
+          <button type="button" class="completed-filter" data-filter="all" aria-pressed="true">すべて</button>
+          {categories.map((c) => (
+            <button type="button" class="completed-filter" data-filter={c} aria-pressed="false">
+              {meta(c).icon} {meta(c).label}
+            </button>
+          ))}
+        </div>
+
+        <div class="completed-grid" data-completed-grid>
+          {rendered.map(({ entry: e, Content }) => (
+            <div class="completed-card" data-category={e.data.category}>
+              <div class="completed-head">
+                <span class="completed-icon">{meta(e.data.category).icon}</span>
+                <div class="completed-heading">
+                  <div class="completed-cat">{meta(e.data.category).label}</div>
+                  <h3>{e.data.title}</h3>
+                </div>
+                <time class="completed-date">{fmt(e.data.date)}</time>
+              </div>
+              <div class="completed-body">
+                <Content />
+              </div>
+            </div>
+          ))}
+        </div>
+      </>
+    )}
+  </section>
+
+  <script>
+    const wrap = document.querySelector('[data-completed-filters]');
+    const grid = document.querySelector('[data-completed-grid]');
+    if (wrap && grid) {
+      wrap.addEventListener('click', (ev) => {
+        const btn = (ev.target as HTMLElement).closest<HTMLElement>('[data-filter]');
+        if (!btn) return;
+        const filter = btn.dataset.filter!;
+        wrap.querySelectorAll('[data-filter]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+        grid.querySelectorAll<HTMLElement>('[data-category]').forEach((card) => {
+          const show = filter === 'all' || card.dataset.category === filter;
+          card.style.display = show ? '' : 'none';
+        });
+      });
+    }
+  </script>
+</Base>

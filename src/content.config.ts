@@ -9,4 +9,13 @@ const diary = defineCollection({
   }),
 });
 
-export const collections = { diary };
+const completed = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/completed' }),
+  schema: z.object({
+    title: z.string(),
+    category: z.string(), // game / book / movie など。自由に増やせる
+    date: z.coerce.date(), // クリア・読了・鑑賞した日
+  }),
+});
+
+export const collections = { diary, completed };
