@@ -23,7 +23,7 @@ sections:
         note: "ミステリーを読みたい"
       - label: "🎮 いまのストーリーゲーム"
         value: "Nothing"
-        note: "Nothing専
+        note: "Nothing専"
       - label: "🕹️ いまのメインゲーム"
         value: "LOL"
         note: "ARAM専"
