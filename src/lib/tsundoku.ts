@@ -39,6 +39,7 @@ export async function fetchTsundokuPiles(token?: string): Promise<TsundokuPile[]
   const authToken = token ?? process.env.GH_ISSUES_TOKEN;
 
   if (!authToken) {
+    console.warn('[tsundoku] GH_ISSUES_TOKEN が未設定のため、積読は空で表示します');
     return [
       { heading: BOOK_HEADING, entries: book },
       { heading: URL_HEADING, entries: urlList },
@@ -55,12 +56,21 @@ export async function fetchTsundokuPiles(token?: string): Promise<TsundokuPile[]
         },
       }
     );
-    if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
-    const issues = (await res.json()) as { body: string | null }[];
+    if (!res.ok) {
+      const body = await res.text().catch(() => '');
+      throw new Error(`GitHub API error: ${res.status} ${res.statusText} ${body}`);
+    }
+    const issues = (await res.json()) as { number: number; title: string; body: string | null }[];
+    console.log(`[tsundoku] tsundokuラベルのopen issueを${issues.length}件取得しました`);
 
     for (const issue of issues) {
       const { kind, text, url } = parseTsundokuIssueBody(issue.body ?? '');
-      if (!text) continue;
+      if (!text) {
+        console.warn(
+          `[tsundoku] issue #${issue.number}(${issue.title})からタイトルを取得できませんでした。Issueフォームのテンプレートで作成されているか確認してください`
+        );
+        continue;
+      }
       const entry: TsundokuEntry = url ? { text, url } : { text };
       if (kind === 'URL') urlList.push(entry);
       else book.push(entry);
