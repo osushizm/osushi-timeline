@@ -1,40 +1,20 @@
-# 「積読に追加」Issueテンプレートから起票されたIssueを読み取り、
-# now.yamlの積読リストへ自動で追記してコミットし、Issueを閉じる
-name: tsundoku-from-issue
+# 積読リストは now.yaml に静的なitemsを持たず、
+# 「tsundoku」ラベルが付いたopenなIssueから毎回のビルド時に取得して表示する。
+# そのため、このワークフローはIssueの開閉・編集に応じてCloudflare Pagesの
+# 再ビルドをトリガーするだけでよい(Issueをcloseすれば一覧から消える)。
+name: tsundoku-rebuild
 on:
   issues:
-    types: [opened]
+    types: [opened, closed, reopened, edited]
 jobs:
-  add:
+  rebuild:
     if: contains(github.event.issue.labels.*.name, 'tsundoku')
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      issues: write
     steps:
-      - uses: actions/checkout@v4
-
-      - name: now.yamlへ追記
-        id: apply
-        env:
-          ISSUE_BODY: ${{ github.event.issue.body }}
-        run: node scripts/apply-tsundoku-issue.mjs
-
-      - name: コミット
+      - name: Trigger Cloudflare Pages deploy hook
         run: |
-          git config user.name "osushi-bot"
-          git config user.email "actions@github.com"
-          git add src/data/now.yaml
-          git commit -m "tsundoku: ${{ github.event.issue.title }}"
-          git push
-
-      - name: Issueを閉じる
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh issue close "${{ github.event.issue.number }}" --comment "積読リストに追加しました🍣"
-
-      - name: 失敗時はIssueにコメント
-        if: failure()
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh issue comment "${{ github.event.issue.number }}" --body "追加に失敗しました。now.yamlの形式が変わっていないか確認してください🙏"
+          if [ -n "${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}" ]; then
+            curl -sf -X POST "${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}"
+          else
+            echo "CLOUDFLARE_DEPLOY_HOOK が未設定です"
+          fi

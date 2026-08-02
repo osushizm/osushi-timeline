@@ -63,18 +63,7 @@ sections:
     title: 積読のやま
     en: TSUNDOKU
     icon: "🗻"
-    items:
-      - heading: "📚 積んでる本"
-        entries:
-          - text: "マスタリングTCP/IP 情報セキュリティ編"
-          - text: "プロジェクト・ヘイル・メアリー(下)"
-          - text: "ふつうのLinuxプログラミング"
-      - heading: "🔖 あとで読むURL"
-        entries:
-          - text: "eBPFでネットワークを覗く話"
-            url: "https://example.com/ebpf"
-          - text: "Cloudflare Workersの新機能まとめ"
-            url: "https://example.com/workers"
+    source: issues   # itemsを直接書かず、tsundokuラベルのopenなGitHub Issueから自動生成する
 
   - type: links
     title: お寿司のリンク

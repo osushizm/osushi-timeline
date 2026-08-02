@@ -14,7 +14,7 @@ Astro製の静的サイトで、Cloudflare Pagesの無料枠だけで動きま�
 | 「今」の内容を更新する([▼](#今を更新する)) | `src/data/now.yaml` |
 | 日記を書く([▼](#日記を書く)) | `templates/diary.md` をコピーして `src/content/diary/YYYY-MM-DD.md` へ |
 | クリアしたゲーム・本・映画の感想を書く([▼](#クリアした実績感想を書く)) | `templates/completed.md` をコピーして `src/content/completed/` へ |
-| 積読(本・あとで読むURL)を追加する([▼](#積読をissueから追加する)) | GitHubでIssueを作るだけ(YAML編集不要) |
+| 積読(本・あとで読むURL)を追加/削除する([▼](#積読をissueで管理する)) | GitHubでIssueを作る/closeする(YAML編集不要) |
 | お品書きの項目をリンクにする([▼](#お品書きdishesの項目をリンクにする)) | `now.yaml` の該当アイテムに `url:` を追加 |
 | ランクやリンクの項目を増やす([▼](#ランクやリンクを増やす)) | `now.yaml` の該当セクションの `items:` |
 | セクションを丸ごと増やす([▼](#セクションごと増やす)) | `now.yaml` の `sections:` |
@@ -36,6 +36,9 @@ src/
     Section.astro       ← セクションディスパッチャ(type→部品の振り分け)
     sections/           ← dishes / ranks / keyword / tags / piles / links
     Calendar.astro      ← クライアント描画カレンダー(月替わり自動追従)
+  lib/
+    data.ts             ← now.yaml / archiveの読み込み
+    tsundoku.ts         ← tsundoku IssueをGitHub APIから取得・変換
   pages/
     index.astro         ← トップ(今)
     diary/              ← バックログ一覧と個別記事
@@ -49,11 +52,11 @@ templates/
   ISSUE_TEMPLATE/
     tsundoku.yml        ← 「積読に追加」Issueフォーム
   workflows/
-    snapshot.yml        ← 毎週日曜0:00 JSTにnow.yamlをarchive/へコピー&コミット
+    snapshot.yml        ← 毎週日曜0:00 JSTにnow.yamlをarchive/へコピー(積読はIssueの内容を焼き込む)
     rebuild.yml         ← 毎日4:17 JSTにCloudflare Pagesを再ビルド
-    tsundoku.yml        ← 積読Issueをnow.yamlへ自動反映してクローズ
+    tsundoku.yml        ← tsundoku Issueの開閉・編集でCloudflare Pagesを再ビルド
 scripts/
-  apply-tsundoku-issue.mjs ← 積読IssueをパースしてYAMLに追記するスクリプト
+  bake-tsundoku-archive.mjs ← snapshot.yml用。積読Issueの内容を静的itemsに焼き込む
 ```
 
 ## ローカルで動かす
@@ -123,19 +126,38 @@ pushすると `/completed/` ページに一覧・カテゴリ絞り込みタブ�
 横長画像も、カード上では同じ横長(16:9)の枠に自動でトリミングされて
 サイズが揃う。省略すればこれまで通り画像なしのカードになる。
 
-### 積読をIssueから追加する
-`now.yaml` を直接編集しなくても、GitHubのIssueを1件作るだけで
-積読リスト(📚積んでる本 / 🔖あとで読むURL)に追加できる。
+### 積読をIssueで管理する
+積読リスト(📚積んでる本 / 🔖あとで読むURL)は `now.yaml` に直接
+書かず、**「tsundoku」ラベルが付いたGitHub Issueがopenの間だけ**
+サイトに表示される。読み終えてIssueをcloseすれば一覧から消える。
 
 1. GitHubアプリ、またはリポジトリのIssuesタブから **New issue**
 2. テンプレート「📚 積読に追加」を選ぶ
-3. 「本」か「URL」を選んでタイトル(・URLなら本文のURLも)を入力して送信
+3. 「本」か「URL」を選んでタイトル(URLの場合は本文のURLも)を入力して送信
+4. 読み終わったら、そのIssueをCloseするだけ
 
-送信すると `tsundoku-from-issue` ワークフローが起動し、
-`now.yaml` の該当リストへ自動で追記してcommit・pushし、Issueに
-コメントして自動でクローズする。now.yamlの構造が変わってワークフローが
-うまく反映できなかった場合は、失敗した旨がIssueにコメントされる
-(その場合は手動でnow.yamlを編集する)。
+Issueの開閉・編集をトリガーに `tsundoku-rebuild` ワークフローが
+Cloudflare Pagesの再ビルドを叩くので、数十秒〜1分ほどで反映される。
+
+#### 初回セットアップ(1回だけ)
+プライベートリポジトリなので、ビルド時にIssue一覧を読むための
+read-onlyトークンが必要:
+
+1. https://github.com/settings/personal-access-tokens/new で
+   fine-grained PATを発行(Repository access: このリポジトリのみ、
+   Permissions: **Issues → Read-only**)
+2. Cloudflare Pagesのプロジェクト → Settings → **Environment variables**
+   に `GH_ISSUES_TOKEN` という名前でそのトークンを登録(Secret推奨)
+3. ローカルでも試したい場合は、リポジトリ直下に `.env` を作って
+   `GH_ISSUES_TOKEN=xxxx` と書く(`.env` は `.gitignore` 済み)
+
+トークン未設定でもビルドは失敗せず、積読は単に空欄で表示される。
+
+#### アーカイブとの関係
+毎週のスナップショット(`weekly-snapshot`)は、その時点でopenだった
+tsundoku Issueの内容を静的なリストとして `archive/日付.yaml` に
+焼き込む。アーカイブは過去の記録なので、後からIssueをcloseしても
+既に撮った週次スナップショットの内容は変わらない。
 
 ### ランクやリンクを増やす
 `now.yaml` の該当セクションの `items:` に要素を足すだけ。コード変更は不要。

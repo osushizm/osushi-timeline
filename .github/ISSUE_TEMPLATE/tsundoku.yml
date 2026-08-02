@@ -1,5 +1,7 @@
 name: 積読に追加
-description: 本やあとで読むURLを積読リストに追加します(送信すると自動でnow.yamlに反映されます)
+description: >-
+  本やあとで読むURLを積読リストに追加します。このIssueがopenの間だけ
+  サイトに表示され、読み終えてcloseすると一覧から消えます。
 title: "[積読] "
 labels: ["tsundoku"]
 body:

@@ -4,9 +4,18 @@ import Section from '../components/Section.astro';
 import SectionHead from '../components/SectionHead.astro';
 import Calendar from '../components/Calendar.astro';
 import { loadNow } from '../lib/data';
+import { fetchTsundokuPiles } from '../lib/tsundoku';
 import { getCollection } from 'astro:content';
 
 const now = loadNow();
+const sections = await Promise.all(
+  now.sections.map(async (section: any) => {
+    if (section.type === 'piles' && section.source === 'issues') {
+      return { ...section, items: await fetchTsundokuPiles() };
+    }
+    return section;
+  })
+);
 const entries = (await getCollection('diary')).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime()
 );
@@ -22,7 +31,7 @@ const excerpt = latest ? latest.body!.replace(/[#>*`\n]/g, ' ').trim().slice(0, 
   description="お寿司の「今」がパッとわかるページ。読んでる本・ゲームのランク・積読・日記をまとめて流しています。"
 >
   <div class="now-grid">
-  {now.sections.map((section) => <Section section={section} />)}
+  {sections.map((section) => <Section section={section} />)}
 
   {latest && (
     <section class="block sec-diary">
