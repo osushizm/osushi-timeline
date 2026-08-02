@@ -8,7 +8,9 @@ on:
     types: [opened, closed, reopened, edited]
 jobs:
   rebuild:
-    if: contains(github.event.issue.labels.*.name, 'tsundoku')
+    # tsundokuラベルに加え、テンプレートの固定タイトル接頭辞「[積読]」でも判定する。
+    # (ラベルはリポジトリに事前作成されていないとIssueフォームから自動付与されないため)
+    if: contains(github.event.issue.labels.*.name, 'tsundoku') || startsWith(github.event.issue.title, '[積読]')
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Cloudflare Pages deploy hook

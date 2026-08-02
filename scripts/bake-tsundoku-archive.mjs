@@ -39,12 +39,19 @@ async function fetchTsundokuPiles() {
   const urlList = [];
   if (!token) return [{ heading: BOOK_HEADING, entries: book }, { heading: URL_HEADING, entries: urlList }];
 
-  const res = await fetch(
-    `https://api.github.com/repos/${REPO}/issues?state=open&labels=tsundoku&per_page=100`,
-    { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' } }
-  );
+  // labelsで絞り込まず全open issueを取ってからtitle/labelで判定する。
+  // (tsundokuラベルが未作成だとIssueフォームからの自動付与に失敗するため、
+  // テンプレートの固定タイトル接頭辞「[積読]」もフォールバックにする)
+  const res = await fetch(`https://api.github.com/repos/${REPO}/issues?state=open&per_page=100`, {
+    headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' },
+  });
   if (!res.ok) throw new Error(`GitHub API error: ${res.status}`);
-  const issues = await res.json();
+  const allIssues = await res.json();
+  const issues = allIssues.filter((issue) => {
+    const hasLabel = issue.labels.some((l) => (typeof l === 'string' ? l : l.name) === 'tsundoku');
+    const hasTitlePrefix = issue.title.startsWith('[積読]');
+    return hasLabel || hasTitlePrefix;
+  });
 
   for (const issue of issues) {
     const { kind, text, url } = parseIssueBody(issue.body ?? '');
