@@ -14,6 +14,7 @@ Astro製の静的サイトで、Cloudflare Pagesの無料枠だけで動きま�
 | 「今」の内容を更新する([▼](#今を更新する)) | `src/data/now.yaml` |
 | 日記を書く([▼](#日記を書く)) | `templates/diary.md` をコピーして `src/content/diary/YYYY-MM-DD.md` へ |
 | クリアしたゲーム・本・映画の感想を書く([▼](#クリアした実績感想を書く)) | `templates/completed.md` をコピーして `src/content/completed/` へ |
+| 積読(本・あとで読むURL)を追加する([▼](#積読をissueから追加する)) | GitHubでIssueを作るだけ(YAML編集不要) |
 | お品書きの項目をリンクにする([▼](#お品書きdishesの項目をリンクにする)) | `now.yaml` の該当アイテムに `url:` を追加 |
 | ランクやリンクの項目を増やす([▼](#ランクやリンクを増やす)) | `now.yaml` の該当セクションの `items:` |
 | セクションを丸ごと増やす([▼](#セクションごと増やす)) | `now.yaml` の `sections:` |
@@ -44,9 +45,15 @@ src/
 templates/
   diary.md              ← 日記を書くときにコピーするひな形
   completed.md          ← 実績を書くときにコピーするひな形
-.github/workflows/
-  snapshot.yml          ← 毎週日曜0:00 JSTにnow.yamlをarchive/へコピー&コミット
-  rebuild.yml           ← 毎日4:17 JSTにCloudflare Pagesを再ビルド
+.github/
+  ISSUE_TEMPLATE/
+    tsundoku.yml        ← 「積読に追加」Issueフォーム
+  workflows/
+    snapshot.yml        ← 毎週日曜0:00 JSTにnow.yamlをarchive/へコピー&コミット
+    rebuild.yml         ← 毎日4:17 JSTにCloudflare Pagesを再ビルド
+    tsundoku.yml        ← 積読Issueをnow.yamlへ自動反映してクローズ
+scripts/
+  apply-tsundoku-issue.mjs ← 積読IssueをパースしてYAMLに追記するスクリプト
 ```
 
 ## ローカルで動かす
@@ -115,6 +122,20 @@ pushすると `/completed/` ページに一覧・カテゴリ絞り込みタブ�
 `image: /completed/ファイル名.jpg` で指定する。本の縦長カバーもゲームの
 横長画像も、カード上では同じ横長(16:9)の枠に自動でトリミングされて
 サイズが揃う。省略すればこれまで通り画像なしのカードになる。
+
+### 積読をIssueから追加する
+`now.yaml` を直接編集しなくても、GitHubのIssueを1件作るだけで
+積読リスト(📚積んでる本 / 🔖あとで読むURL)に追加できる。
+
+1. GitHubアプリ、またはリポジトリのIssuesタブから **New issue**
+2. テンプレート「📚 積読に追加」を選ぶ
+3. 「本」か「URL」を選んでタイトル(・URLなら本文のURLも)を入力して送信
+
+送信すると `tsundoku-from-issue` ワークフローが起動し、
+`now.yaml` の該当リストへ自動で追記してcommit・pushし、Issueに
+コメントして自動でクローズする。now.yamlの構造が変わってワークフローが
+うまく反映できなかった場合は、失敗した旨がIssueにコメントされる
+(その場合は手動でnow.yamlを編集する)。
 
 ### ランクやリンクを増やす
 `now.yaml` の該当セクションの `items:` に要素を足すだけ。コード変更は不要。

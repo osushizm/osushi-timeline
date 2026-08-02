@@ -1,0 +1,40 @@
+# 「積読に追加」Issueテンプレートから起票されたIssueを読み取り、
+# now.yamlの積読リストへ自動で追記してコミットし、Issueを閉じる
+name: tsundoku-from-issue
+on:
+  issues:
+    types: [opened]
+jobs:
+  add:
+    if: contains(github.event.issue.labels.*.name, 'tsundoku')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: now.yamlへ追記
+        id: apply
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: node scripts/apply-tsundoku-issue.mjs
+
+      - name: コミット
+        run: |
+          git config user.name "osushi-bot"
+          git config user.email "actions@github.com"
+          git add src/data/now.yaml
+          git commit -m "tsundoku: ${{ github.event.issue.title }}"
+          git push
+
+      - name: Issueを閉じる
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh issue close "${{ github.event.issue.number }}" --comment "積読リストに追加しました🍣"
+
+      - name: 失敗時はIssueにコメント
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh issue comment "${{ github.event.issue.number }}" --body "追加に失敗しました。now.yamlの形式が変わっていないか確認してください🙏"

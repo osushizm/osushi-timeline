@@ -1,0 +1,28 @@
+name: 積読に追加
+description: 本やあとで読むURLを積読リストに追加します(送信すると自動でnow.yamlに反映されます)
+title: "[積読] "
+labels: ["tsundoku"]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: 追加する種類
+      options:
+        - 本
+        - URL
+    validations:
+      required: true
+  - type: input
+    id: text
+    attributes:
+      label: タイトル
+      placeholder: 本のタイトル、または記事のタイトル
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: URL(種類が「URL」のときだけ入力)
+      placeholder: https://example.com/article
+    validations:
+      required: false
