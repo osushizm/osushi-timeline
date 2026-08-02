@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Piles from '../components/sections/Piles.astro';
+import { fetchTsundokuPiles } from '../lib/tsundoku';
+
+const piles = await fetchTsundokuPiles();
+const items = piles.map((pile, i) => ({ ...pile, slug: i === 0 ? 'book' : 'url' }));
+---
+<Base
+  title="積読のやま(全件) | お寿司のタイムライン"
+  description="積んでる本とあとで読むURLの全件一覧。"
+>
+  <section class="block">
+    <SectionHead icon="🗻" title="積読のやま(全件)" en="TSUNDOKU" />
+    <Piles section={{ items }} />
+    <p style="text-align:center;margin-top:20px">
+      <a class="diary-more" href="/">→ トップへ戻る</a>
+    </p>
+  </section>
+</Base>

@@ -154,6 +154,7 @@ a.dish:hover{transform:translateY(-2px)}
 .pile li{padding:7px 0;font-size:clamp(14.5px, 0.16vw + 13.9px, 15.5px);border-top:1px dashed #EFE2D0}
 .pile li:first-child{border-top:none}
 .pile a{color:#4E7FA6;text-decoration:none;border-bottom:1px dotted #9CC6E0}
+.pile-more{display:inline-block;margin-top:10px;font-size:clamp(12.5px, 0.08vw + 12.2px, 13px);color:#C46A57;text-decoration:none}
 
 /* ── links ── */
 .links{display:grid;gap:10px}

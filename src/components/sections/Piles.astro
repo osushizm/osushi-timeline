@@ -3,13 +3,18 @@ const { section } = Astro.props;
 ---
 <div class="tsundoku">
   {(section.items ?? []).map((pile: any) => (
-    <div class="pile">
-      <h3>{pile.heading} <span class="count">{(pile.entries ?? []).length}件</span></h3>
+    <div class="pile" id={pile.slug}>
+      <h3>{pile.heading} <span class="count">{pile.totalCount ?? (pile.entries ?? []).length}件</span></h3>
       <ul>
         {(pile.entries ?? []).map((e: any) => (
           <li>{e.url ? <a href={e.url} target="_blank" rel="noopener">{e.text}</a> : e.text}</li>
         ))}
       </ul>
+      {pile.moreUrl && (
+        <a class="pile-more" href={pile.moreUrl}>
+          → あと{pile.totalCount - (pile.entries ?? []).length}件を見る
+        </a>
+      )}
     </div>
   ))}
 </div>

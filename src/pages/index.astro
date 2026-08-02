@@ -7,11 +7,25 @@ import { loadNow } from '../lib/data';
 import { fetchTsundokuPiles } from '../lib/tsundoku';
 import { getCollection } from 'astro:content';
 
+const MAX_PILE_ITEMS = 5;
 const now = loadNow();
 const sections = await Promise.all(
   now.sections.map(async (section: any) => {
     if (section.type === 'piles' && section.source === 'issues') {
-      return { ...section, items: await fetchTsundokuPiles() };
+      const piles = await fetchTsundokuPiles();
+      const items = piles.map((pile, i) => {
+        const slug = i === 0 ? 'book' : 'url';
+        const totalCount = pile.entries.length;
+        if (totalCount <= MAX_PILE_ITEMS) return { ...pile, slug };
+        return {
+          ...pile,
+          slug,
+          entries: pile.entries.slice(0, MAX_PILE_ITEMS),
+          totalCount,
+          moreUrl: `/tsundoku/#${slug}`,
+        };
+      });
+      return { ...section, items };
     }
     return section;
   })
