@@ -49,16 +49,21 @@ const fmt = (d: Date) => `${d.getUTCFullYear()}.${pad(d.getUTCMonth() + 1)}.${pa
         <div class="completed-grid" data-completed-grid>
           {rendered.map(({ entry: e, Content }) => (
             <div class="completed-card" data-category={e.data.category}>
-              <div class="completed-head">
-                <span class="completed-icon">{meta(e.data.category).icon}</span>
-                <div class="completed-heading">
-                  <div class="completed-cat">{meta(e.data.category).label}</div>
-                  <h3>{e.data.title}</h3>
+              {e.data.image && (
+                <img class="completed-thumb" src={e.data.image} alt={e.data.title} loading="lazy" />
+              )}
+              <div class="completed-content">
+                <div class="completed-head">
+                  <span class="completed-icon">{meta(e.data.category).icon}</span>
+                  <div class="completed-heading">
+                    <div class="completed-cat">{meta(e.data.category).label}</div>
+                    <h3>{e.data.title}</h3>
+                  </div>
+                  <time class="completed-date">{fmt(e.data.date)}</time>
                 </div>
-                <time class="completed-date">{fmt(e.data.date)}</time>
-              </div>
-              <div class="completed-body">
-                <Content />
+                <div class="completed-body">
+                  <Content />
+                </div>
               </div>
             </div>
           ))}

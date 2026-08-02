@@ -15,6 +15,7 @@ const completed = defineCollection({
     title: z.string(),
     category: z.string(), // game / book / movie など。自由に増やせる
     date: z.coerce.date(), // クリア・読了・鑑賞した日
+    image: z.string().optional(), // サムネイル画像のパス(省略可)。例: /completed/xxx.jpg
   }),
 });
 

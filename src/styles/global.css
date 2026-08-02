@@ -227,8 +227,13 @@ a.dish:hover{transform:translateY(-2px)}
 .completed-card{
   background:var(--plate);border:1.5px solid var(--rim);
   border-radius:var(--radius);box-shadow:var(--plate-shadow);
-  padding:16px 18px;
+  overflow:hidden;
 }
+.completed-thumb{
+  display:block;width:100%;aspect-ratio:16/9;object-fit:cover;
+  background:#FDF3E3;border-bottom:1.5px solid var(--rim);
+}
+.completed-content{padding:16px 18px}
 .completed-head{display:flex;align-items:flex-start;gap:12px}
 .completed-icon{
   width:36px;height:36px;border-radius:50%;flex:none;
