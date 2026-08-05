@@ -47,9 +47,9 @@ const ogImageURL = new URL('/og-image.svg', Astro.site);
       {updated && <span class="updated">最終更新:{updated}</span>}
       <nav class="global">
         <a href="/" aria-current={current === 'home' ? 'page' : undefined}>いま</a>
+        <a href="/tech/" aria-current={current === 'tech' ? 'page' : undefined}>テック</a>
+        <a href="/game/" aria-current={current === 'game' ? 'page' : undefined}>ゲーム</a>
         <a href="/diary/" aria-current={current === 'diary' ? 'page' : undefined}>日記</a>
-        <a href="/archive/" aria-current={current === 'archive' ? 'page' : undefined}>アーカイブ</a>
-        <a href="/completed/" aria-current={current === 'completed' ? 'page' : undefined}>実績</a>
       </nav>
     </header>
     <div class="lane" aria-hidden="true">
@@ -66,6 +66,7 @@ const ogImageURL = new URL('/og-image.svg', Astro.site);
     <footer class="site">
       <div class="plates">🍽️🍽️🍽️</div>
       お寿司のタイムライン — シャリの上でまた来週。
+      <div class="footer-links"><a href="/archive/">アーカイブ</a></div>
     </footer>
   </div>
 </body>

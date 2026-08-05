@@ -1,0 +1,17 @@
+---
+import Base from '../../layouts/Base.astro';
+import BlogList from '../../components/BlogList.astro';
+---
+<Base
+  title="テックブログ | お寿司のタイムライン"
+  current="tech"
+  description="技術系の記事やメモをまとめたテックブログ。"
+>
+  <BlogList
+    collectionName="techblog"
+    icon="💻"
+    title="テックブログ"
+    en="TECH"
+    emptyMessage="まだ記事がありません。templates/techblog.md をコピーして最初の1件を追加してください。"
+  />
+</Base>

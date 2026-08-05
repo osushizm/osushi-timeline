@@ -1,6 +1,7 @@
 # 🍣 お寿司のタイムライン
 
-お寿司の「今」がパッとわかるNowページ + 日記 + アーカイブ。
+お寿司の「今」がパッとわかるNowページ + テックブログ + ゲームブログ + 日記。
+ナビは いま → テック → ゲーム → 日記 の4タブ構成(アーカイブはフッターから)。
 Astro製の静的サイトで、Cloudflare Pagesの無料枠だけで動きます。
 
 ## 更新の手順(まとめ)
@@ -13,7 +14,8 @@ Astro製の静的サイトで、Cloudflare Pagesの無料枠だけで動きま�
 |---|---|
 | 「今」の内容を更新する([▼](#今を更新する)) | `src/data/now.yaml` |
 | 日記を書く([▼](#日記を書く)) | `templates/diary.md` をコピーして `src/content/diary/YYYY-MM-DD.md` へ |
-| クリアしたゲーム・本・映画の感想を書く([▼](#クリアした実績感想を書く)) | `templates/completed.md` をコピーして `src/content/completed/` へ |
+| テックブログを書く([▼](#テックブログゲームブログを書く)) | `templates/techblog.md` をコピーして `src/content/techblog/` へ |
+| ゲームブログを書く([▼](#テックブログゲームブログを書く)) | `templates/gameblog.md` をコピーして `src/content/gameblog/` へ |
 | 積読(本・あとで読むURL)を追加/削除する([▼](#積読をissueで管理する)) | GitHubでIssueを作る/closeする(YAML編集不要) |
 | お品書きの項目をリンクにする([▼](#お品書きdishesの項目をリンクにする)) | `now.yaml` の該当アイテムに `url:` を追加 |
 | ランクやリンクの項目を増やす([▼](#ランクやリンクを増やす)) | `now.yaml` の該当セクションの `items:` |
@@ -30,24 +32,29 @@ src/
   content/
     diary/
       YYYY-MM-DD.md     ← 日記。ファイルを置くだけで一覧・カレンダーに反映
-    completed/
-      *.md              ← クリアしたゲーム・読んだ本・観た映画の感想
+    techblog/
+      *.md              ← テックブログの記事
+    gameblog/
+      *.md              ← ゲームブログの記事
   components/
     Section.astro       ← セクションディスパッチャ(type→部品の振り分け)
     sections/           ← dishes / ranks / keyword / tags / piles / links
+    BlogList.astro       ← テック/ゲームブログ共通の一覧・タグ絞り込み表示
     Calendar.astro      ← クライアント描画カレンダー(月替わり自動追従)
   lib/
     data.ts             ← now.yaml / archiveの読み込み
     tsundoku.ts         ← tsundoku IssueをGitHub APIから取得・変換
   pages/
     index.astro         ← トップ(今)
+    tech/               ← テックブログ一覧
+    game/               ← ゲームブログ一覧
     diary/              ← バックログ一覧と個別記事
-    archive/            ← スナップショット一覧と個別表示
-    completed/          ← クリアした実績と感想の一覧(タグで絞り込み可)
+    archive/            ← スナップショット一覧と個別表示(ナビ外、フッターからリンク)
     diary-dates.json.ts ← 日記のある日付リスト(カレンダーが参照)
 templates/
   diary.md              ← 日記を書くときにコピーするひな形
-  completed.md          ← 実績を書くときにコピーするひな形
+  techblog.md           ← テックブログを書くときにコピーするひな形
+  gameblog.md           ← ゲームブログを書くときにコピーするひな形
 .github/
   ISSUE_TEMPLATE/
     tsundoku.yml        ← 「積読に追加」Issueフォーム
@@ -102,29 +109,31 @@ date: 2026-08-01
 
 pushすれば個別ページ・バックログ・カレンダーの🍣がすべて自動生成されます。
 
-### クリアした実績・感想を書く
-`templates/completed.md` をコピーして `src/content/completed/` に好きな
-ファイル名(例: `valorant-s1.md`)で保存する:
+### テックブログ・ゲームブログを書く
+`templates/techblog.md` または `templates/gameblog.md` をコピーして、
+それぞれ `src/content/techblog/` / `src/content/gameblog/` に好きな
+ファイル名(例: `kubernetes-network.md`)で保存する:
 
 ```markdown
 ---
-title: 作品タイトル
-category: game   # game / book / movie。新しいカテゴリも自由に増やせる
+title: 記事タイトル
 date: 2026-08-01
-image: /completed/xxx.jpg   # 省略可。サムネイル画像
+image: /techblog/xxx.jpg   # 省略可。サムネイル画像
+tags: [Kubernetes, Cloudflare]   # 省略可。絞り込みタグ、自由に増やせる
 ---
 
-感想をMarkdownで書く。
+本文をMarkdownで書く。
 ```
 
-pushすると `/completed/` ページに一覧・カテゴリ絞り込みタブが自動生成されます。
-`game`/`book`/`movie` 以外のカテゴリ文字列を書いた場合もページは壊れず、
-アイコンだけ汎用の🏷️になります(コード変更不要)。
+pushすると `/tech/` または `/game/` ページに一覧・タグ絞り込みタブが
+自動生成される。タグは記事ごとに好きな数だけ付けられ、一覧ページ上部の
+タブは実際に使われているタグから自動生成されるので、コード変更は不要。
 
-サムネイルを付けたい場合は画像ファイルを `public/completed/` に置き、
-`image: /completed/ファイル名.jpg` で指定する。本の縦長カバーもゲームの
-横長画像も、カード上では同じ横長(16:9)の枠に自動でトリミングされて
-サイズが揃う。省略すればこれまで通り画像なしのカードになる。
+サムネイルを付けたい場合は画像ファイルを `public/techblog/` または
+`public/gameblog/` に置き、`image: /techblog/ファイル名.jpg` のように
+指定する。縦長・横長どちらの画像も、カード上では同じ横長(16:9)の枠に
+自動でトリミングされてサイズが揃う。省略すればこれまで通り画像なしの
+カードになる。
 
 ### 積読をIssueで管理する
 積読リスト(📚積んでる本 / 🔖あとで読むURL)は `now.yaml` に直接

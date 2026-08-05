@@ -38,16 +38,20 @@ header.site{padding:40px 0 8px;text-align:center}
   background:#FBF0DF;border-radius:999px;padding:3px 14px;
 }
 nav.global{
-  margin-top:14px;display:flex;justify-content:center;gap:8px;flex-wrap:wrap;
+  margin-top:16px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap;
 }
 nav.global a{
-  font-size:clamp(13px, 0.16vw + 12.4px, 14px);text-decoration:none;color:#8A7259;
-  background:var(--plate);border:1.5px solid var(--rim);
-  border-radius:999px;padding:5px 16px;
+  font-family:var(--maru);font-weight:500;
+  font-size:clamp(14.5px, 0.2vw + 13.6px, 16px);text-decoration:none;color:#8A7259;
+  background:var(--plate);border:2px solid var(--rim);
+  border-radius:999px;padding:7px 20px;
   box-shadow:var(--plate-shadow);
+  transition:transform .15s ease;
 }
+nav.global a:hover{transform:translateY(-1px)}
 nav.global a[aria-current="page"]{
-  background:#FFE9E4;border-color:#F6C9BF;color:#C46A57;
+  background:#FFE9E4;border-color:#F0A98F;color:#C46A57;
+  box-shadow:0 4px 14px rgba(196,106,87,.22);
 }
 
 /* ── 回転レーン ── */
@@ -215,39 +219,39 @@ a.dish:hover{transform:translateY(-2px)}
 .cal td.write a::after{content:"🍣";font-size:10px;display:block;line-height:1}
 .cal td.today{background:#FFE9E4;border-radius:10px;font-weight:700;color:#C46A57}
 
-/* ── 実績(completed) ── */
-.completed-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
-.completed-filter{
+/* ── ブログ(tech/game共通) ── */
+.blog-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.blog-filter{
   font-size:clamp(13px, 0.16vw + 12.4px, 14px);cursor:pointer;
   background:var(--plate);border:1.5px solid var(--rim);color:#8A7259;
   border-radius:999px;padding:6px 16px;
 }
-.completed-filter[aria-pressed="true"]{background:#FFE9E4;border-color:#F6C9BF;color:#C46A57}
-.completed-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media (max-width:520px){.completed-grid{grid-template-columns:1fr}}
-.completed-card{
+.blog-filter[aria-pressed="true"]{background:#FFE9E4;border-color:#F6C9BF;color:#C46A57}
+.blog-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:520px){.blog-grid{grid-template-columns:1fr}}
+.blog-card{
   background:var(--plate);border:1.5px solid var(--rim);
   border-radius:var(--radius);box-shadow:var(--plate-shadow);
   overflow:hidden;
 }
-.completed-thumb{
+.blog-thumb{
   display:block;width:100%;aspect-ratio:16/9;object-fit:cover;
   background:#FDF3E3;border-bottom:1.5px solid var(--rim);
 }
-.completed-content{padding:16px 18px}
-.completed-head{display:flex;align-items:flex-start;gap:12px}
-.completed-icon{
-  width:36px;height:36px;border-radius:50%;flex:none;
-  display:grid;place-items:center;font-size:18px;background:#FDF3E3;
+.blog-content{padding:16px 18px}
+.blog-head{display:flex;align-items:flex-start;gap:12px}
+.blog-heading{flex:1;min-width:0}
+.blog-head h3{font-family:var(--maru);font-weight:500;font-size:clamp(15px, 0.16vw + 14.4px, 16px)}
+.blog-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.blog-tag{
+  background:#EFF6E8;color:#5C7A48;border:1.5px solid #D8E8C8;
+  border-radius:999px;padding:2px 10px;font-size:clamp(10.5px, 0.08vw + 10.2px, 11px);
 }
-.completed-heading{flex:1;min-width:0}
-.completed-cat{font-size:clamp(11px, 0.08vw + 10.7px, 11.5px);color:#B5A28D;letter-spacing:.08em}
-.completed-head h3{font-family:var(--maru);font-weight:500;font-size:clamp(15px, 0.16vw + 14.4px, 16px);margin-top:2px}
-.completed-date{margin-left:auto;font-size:clamp(11px, 0.08vw + 10.7px, 11.5px);color:#B5866E;white-space:nowrap;padding-top:2px}
-.completed-body{margin-top:10px;font-size:clamp(13.5px, 0.16vw + 12.9px, 14.5px);color:#5C4B3E;line-height:1.7}
-.completed-body p{margin:8px 0}
-.completed-body p:first-child{margin-top:0}
-.completed-body a{color:#4E7FA6}
+.blog-date{margin-left:auto;font-size:clamp(11px, 0.08vw + 10.7px, 11.5px);color:#B5866E;white-space:nowrap;padding-top:2px}
+.blog-body{margin-top:10px;font-size:clamp(13.5px, 0.16vw + 12.9px, 14.5px);color:#5C4B3E;line-height:1.7}
+.blog-body p{margin:8px 0}
+.blog-body p:first-child{margin-top:0}
+.blog-body a{color:#4E7FA6}
 
 /* ── アーカイブ ── */
 .archive-banner{
@@ -259,6 +263,8 @@ a.dish:hover{transform:translateY(-2px)}
 
 footer.site{margin-top:56px;text-align:center;font-size:clamp(12px, 0.08vw + 11.7px, 12.5px);color:#B5A28D;letter-spacing:.06em}
 footer.site .plates{font-size:16px;letter-spacing:.4em;margin-bottom:6px}
+.footer-links{margin-top:8px}
+.footer-links a{color:#B5A28D;text-decoration:underline;text-underline-offset:2px}
 
 /* ── ワイド画面:画面幅に合わせた流体レイアウト ── */
 /* コンテナは画面の92%まで伸びる(上限1560px)。
@@ -286,6 +292,6 @@ footer.site .plates{font-size:16px;letter-spacing:.4em;margin-bottom:6px}
   .diary-card{max-width:920px;margin-inline:auto}
   /* レーンの寿司の間隔も画面幅にあわせて広がる */
   .lane-track{gap:clamp(34px, 3vw, 64px)}
-  /* 実績カードも入るぶんだけ横に並ぶ */
-  .completed-grid{grid-template-columns:repeat(auto-fit, minmax(280px, 1fr))}
+  /* ブログカードも入るぶんだけ横に並ぶ */
+  .blog-grid{grid-template-columns:repeat(auto-fit, minmax(280px, 1fr))}
 }

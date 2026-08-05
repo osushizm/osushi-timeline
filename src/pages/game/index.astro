@@ -1,0 +1,17 @@
+---
+import Base from '../../layouts/Base.astro';
+import BlogList from '../../components/BlogList.astro';
+---
+<Base
+  title="ゲームブログ | お寿司のタイムライン"
+  current="game"
+  description="遊んでいるゲーム、クリアしたゲームについての記事。"
+>
+  <BlogList
+    collectionName="gameblog"
+    icon="🎮"
+    title="ゲームブログ"
+    en="GAME"
+    emptyMessage="まだ記事がありません。templates/gameblog.md をコピーして最初の1件を追加してください。"
+  />
+</Base>

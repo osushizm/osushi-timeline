@@ -1,0 +1,86 @@
+---
+import SectionHead from './SectionHead.astro';
+import { getCollection, render, type CollectionKey } from 'astro:content';
+
+interface Props {
+  collectionName: CollectionKey;
+  icon: string;
+  title: string;
+  en: string;
+  emptyMessage: string;
+}
+const { collectionName, icon, title, en, emptyMessage } = Astro.props;
+
+const entries = (await getCollection(collectionName as any)).sort(
+  (a: any, b: any) => b.data.date.getTime() - a.data.date.getTime()
+);
+const rendered = await Promise.all(
+  entries.map(async (e: any) => ({ entry: e, Content: (await render(e)).Content }))
+);
+const allTags = [...new Set(entries.flatMap((e: any) => e.data.tags ?? []))];
+
+const pad = (n: number) => String(n).padStart(2, '0');
+const fmt = (d: Date) => `${d.getUTCFullYear()}.${pad(d.getUTCMonth() + 1)}.${pad(d.getUTCDate())}`;
+---
+<section class="block">
+  <SectionHead icon={icon} title={title} en={en} />
+
+  {entries.length === 0 ? (
+    <div class="archive-banner">{emptyMessage}</div>
+  ) : (
+    <>
+      {allTags.length > 0 && (
+        <div class="blog-filters" data-blog-filters>
+          <button type="button" class="blog-filter" data-filter="all" aria-pressed="true">すべて</button>
+          {allTags.map((t) => (
+            <button type="button" class="blog-filter" data-filter={t} aria-pressed="false">{t}</button>
+          ))}
+        </div>
+      )}
+
+      <div class="blog-grid" data-blog-grid>
+        {rendered.map(({ entry: e, Content }) => (
+          <div class="blog-card" data-tags={(e.data.tags ?? []).join(',')}>
+            {e.data.image && (
+              <img class="blog-thumb" src={e.data.image} alt={e.data.title} loading="lazy" />
+            )}
+            <div class="blog-content">
+              <div class="blog-head">
+                <div class="blog-heading">
+                  <h3>{e.data.title}</h3>
+                  {e.data.tags && e.data.tags.length > 0 && (
+                    <div class="blog-tags">
+                      {e.data.tags.map((t: string) => <span class="blog-tag">{t}</span>)}
+                    </div>
+                  )}
+                </div>
+                <time class="blog-date">{fmt(e.data.date)}</time>
+              </div>
+              <div class="blog-body">
+                <Content />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
+  )}
+</section>
+
+<script>
+  const wrap = document.querySelector('[data-blog-filters]');
+  const grid = document.querySelector('[data-blog-grid]');
+  if (wrap && grid) {
+    wrap.addEventListener('click', (ev) => {
+      const btn = (ev.target as HTMLElement).closest<HTMLElement>('[data-filter]');
+      if (!btn) return;
+      const filter = btn.dataset.filter!;
+      wrap.querySelectorAll('[data-filter]').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      grid.querySelectorAll<HTMLElement>('[data-tags]').forEach((card) => {
+        const tags = card.dataset.tags!.split(',').filter(Boolean);
+        const show = filter === 'all' || tags.includes(filter);
+        card.style.display = show ? '' : 'none';
+      });
+    });
+  }
+</script>
