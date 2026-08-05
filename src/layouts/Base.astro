@@ -1,10 +1,9 @@
 ---
 import '../styles/global.css';
-interface Props { title?: string; current?: string; updated?: string; description?: string }
+interface Props { title?: string; current?: string; description?: string }
 const {
   title = 'お寿司のタイムライン',
   current = '',
-  updated,
   description = 'お寿司の「今」が流れてくるところ ── 日々のログとランクの遍歴。',
 } = Astro.props;
 
@@ -44,7 +43,6 @@ const ogImageURL = new URL('/og-image.svg', Astro.site);
     <header class="site">
       <h1 class="site-title"><a href="/">🍣 お寿司のタイムライン</a></h1>
       <p class="tagline">── お寿司の「今」が流れてくるところ ──</p>
-      {updated && <span class="updated">最終更新:{updated}</span>}
       <nav class="global">
         <a href="/" aria-current={current === 'home' ? 'page' : undefined}>いま</a>
         <a href="/tech/" aria-current={current === 'tech' ? 'page' : undefined}>テック</a>

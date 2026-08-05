@@ -32,11 +32,6 @@ header.site{padding:40px 0 8px;text-align:center}
 }
 .site-title a{text-decoration:none}
 .tagline{margin-top:6px;font-size:clamp(13px, 0.1vw + 12.6px, 14px);color:#93816F;letter-spacing:.08em}
-.updated{
-  display:inline-block;margin-top:12px;
-  font-size:clamp(12px, 0.08vw + 11.7px, 12.5px);color:#A08B76;
-  background:#FBF0DF;border-radius:999px;padding:3px 14px;
-}
 nav.global{
   margin-top:16px;display:flex;justify-content:center;gap:10px;flex-wrap:wrap;
 }
