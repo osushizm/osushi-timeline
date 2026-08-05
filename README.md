@@ -39,15 +39,14 @@ src/
   components/
     Section.astro       ← セクションディスパッチャ(type→部品の振り分け)
     sections/           ← dishes / ranks / keyword / tags / piles / links
-    BlogList.astro       ← テック/ゲームブログ共通の一覧・タグ絞り込み表示
     Calendar.astro      ← クライアント描画カレンダー(月替わり自動追従)
   lib/
     data.ts             ← now.yaml / archiveの読み込み
     tsundoku.ts         ← tsundoku IssueをGitHub APIから取得・変換
   pages/
     index.astro         ← トップ(今)
-    tech/               ← テックブログ一覧
-    game/               ← ゲームブログ一覧
+    tech/               ← テックブログのバックログ一覧と個別記事(日記と同じ形式)
+    game/               ← ゲームブログのバックログ一覧と個別記事(日記と同じ形式)
     diary/              ← バックログ一覧と個別記事
     archive/            ← スナップショット一覧と個別表示(ナビ外、フッターからリンク)
     diary-dates.json.ts ← 日記のある日付リスト(カレンダーが参照)
@@ -110,30 +109,22 @@ date: 2026-08-01
 pushすれば個別ページ・バックログ・カレンダーの🍣がすべて自動生成されます。
 
 ### テックブログ・ゲームブログを書く
-`templates/techblog.md` または `templates/gameblog.md` をコピーして、
-それぞれ `src/content/techblog/` / `src/content/gameblog/` に好きな
-ファイル名(例: `kubernetes-network.md`)で保存する:
+日記とまったく同じ形式。`templates/techblog.md` または
+`templates/gameblog.md` をコピーして、それぞれ `src/content/techblog/` /
+`src/content/gameblog/` に好きなファイル名(例: `kubernetes-network.md`)
+で保存する:
 
 ```markdown
 ---
 title: 記事タイトル
 date: 2026-08-01
-image: /techblog/xxx.jpg   # 省略可。サムネイル画像
-tags: [Kubernetes, Cloudflare]   # 省略可。絞り込みタグ、自由に増やせる
 ---
 
 本文をMarkdownで書く。
 ```
 
-pushすると `/tech/` または `/game/` ページに一覧・タグ絞り込みタブが
-自動生成される。タグは記事ごとに好きな数だけ付けられ、一覧ページ上部の
-タブは実際に使われているタグから自動生成されるので、コード変更は不要。
-
-サムネイルを付けたい場合は画像ファイルを `public/techblog/` または
-`public/gameblog/` に置き、`image: /techblog/ファイル名.jpg` のように
-指定する。縦長・横長どちらの画像も、カード上では同じ横長(16:9)の枠に
-自動でトリミングされてサイズが揃う。省略すればこれまで通り画像なしの
-カードになる。
+pushすれば `/tech/` または `/game/` に個別ページ・バックログ一覧が
+自動生成される。
 
 ### 積読をIssueで管理する
 積読リスト(📚積んでる本 / 🔖あとで読むURL)は `now.yaml` に直接

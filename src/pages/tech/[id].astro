@@ -1,0 +1,26 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('techblog');
+  return entries.map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const pad = (n: number) => String(n).padStart(2, '0');
+const d = entry.data.date;
+const fmt = `${d.getUTCFullYear()}.${pad(d.getUTCMonth() + 1)}.${pad(d.getUTCDate())}`;
+const excerpt = entry.body!.replace(/[#>*`\n]/g, ' ').trim().slice(0, 90) + '…';
+---
+<Base title={`${entry.data.title} | お寿司のタイムライン`} current="tech" description={excerpt}>
+  <section class="block">
+    <div class="diary-card">
+      <time>{fmt}</time>
+      <h1>{entry.data.title}</h1>
+      <div class="diary-body"><Content /></div>
+      <a class="diary-more" href="/tech/">→ バックログにもどる</a>
+    </div>
+  </section>
+</Base>

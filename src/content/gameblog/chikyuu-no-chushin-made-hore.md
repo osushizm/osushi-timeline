@@ -1,8 +1,6 @@
 ---
 title: 地球の中心まで掘れ!
 date: 2026-08-02
-image: /gameblog/chikyuu-no-chushin-made-hore.jpg
-tags: [クリア報告]
 ---
 
 Steamのゲームをクリアした!全実績解除!

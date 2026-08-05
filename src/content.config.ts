@@ -9,21 +9,20 @@ const diary = defineCollection({
   }),
 });
 
-const blogSchema = z.object({
-  title: z.string(),
-  date: z.coerce.date(),
-  image: z.string().optional(), // サムネイル画像のパス(省略可)
-  tags: z.array(z.string()).optional(), // 絞り込みタグ(省略可、自由に増やせる)
-});
-
 const techblog = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/techblog' }),
-  schema: blogSchema,
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+  }),
 });
 
 const gameblog = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/gameblog' }),
-  schema: blogSchema,
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+  }),
 });
 
 export const collections = { diary, techblog, gameblog };

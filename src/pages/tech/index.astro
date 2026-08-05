@@ -1,17 +1,30 @@
 ---
 import Base from '../../layouts/Base.astro';
-import BlogList from '../../components/BlogList.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import { getCollection } from 'astro:content';
+
+const entries = (await getCollection('techblog')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+const pad = (n: number) => String(n).padStart(2, '0');
+const fmt = (d: Date) => `${d.getUTCFullYear()}.${pad(d.getUTCMonth() + 1)}.${pad(d.getUTCDate())}`;
 ---
-<Base
-  title="テックブログ | お寿司のタイムライン"
-  current="tech"
-  description="技術系の記事やメモをまとめたテックブログ。"
->
-  <BlogList
-    collectionName="techblog"
-    icon="💻"
-    title="テックブログ"
-    en="TECH"
-    emptyMessage="まだ記事がありません。templates/techblog.md をコピーして最初の1件を追加してください。"
-  />
+<Base title="テックブログ | お寿司のタイムライン" current="tech" description="技術系の記事やメモをまとめたテックブログのバックログ一覧。">
+  <section class="block">
+    <SectionHead icon="💻" title="テックブログ" en="TECH" />
+    {entries.length === 0 ? (
+      <div class="archive-banner">まだ記事がありません。templates/techblog.md をコピーして最初の1件を追加してください。</div>
+    ) : (
+      <ul class="diary-list">
+        {entries.map((e) => (
+          <li>
+            <a href={`/tech/${e.id}/`}>
+              <time>{fmt(e.data.date)}</time>
+              <div class="dt">{e.data.title}</div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
 </Base>
