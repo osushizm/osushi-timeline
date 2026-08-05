@@ -38,6 +38,22 @@ const pad = (n: number) => String(n).padStart(2, '0');
 const fmt = (d: Date) => `${d.getUTCFullYear()}.${pad(d.getUTCMonth() + 1)}.${pad(d.getUTCDate())}`;
 const iso = (d: Date) => `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`;
 const excerpt = latest ? latest.body!.replace(/[#>*`\n]/g, ' ').trim().slice(0, 90) + '…' : '';
+
+const techEntries = (await getCollection('techblog')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+const latestTech = techEntries[0];
+const techExcerpt = latestTech
+  ? latestTech.body!.replace(/[#>*`\n]/g, ' ').trim().slice(0, 90) + '…'
+  : '';
+
+const gameEntries = (await getCollection('gameblog')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+const latestGame = gameEntries[0];
+const gameExcerpt = latestGame
+  ? latestGame.body!.replace(/[#>*`\n]/g, ' ').trim().slice(0, 90) + '…'
+  : '';
 ---
 <Base
   current="home"
@@ -47,18 +63,48 @@ const excerpt = latest ? latest.body!.replace(/[#>*`\n]/g, ' ').trim().slice(0, 
   <div class="now-grid">
   {sections.map((section) => <Section section={section} />)}
 
-  {latest && (
-    <section class="block sec-diary">
-      <SectionHead icon="📝" title="さいきんの日記" en="DIARY" />
-      <div class="diary-card">
-        <time datetime={iso(latest.data.date)}>{fmt(latest.data.date)}</time>
-        <h3>{latest.data.title}</h3>
-        <p class="excerpt">{excerpt}</p>
-        <a class="diary-more" href={`/diary/${latest.id}/`}>→ つづきを読む</a>
-        <a class="diary-more" href="/diary/" style="margin-left:12px">→ バックログ</a>
-        <Calendar />
-      </div>
-    </section>
+  {(latestTech || latestGame || latest) && (
+    <div class="sec-previews">
+      {latestTech && (
+        <section class="block sec-tech">
+          <SectionHead icon="💻" title="さいきんのテック" en="TECH" />
+          <div class="diary-card">
+            <time datetime={iso(latestTech.data.date)}>{fmt(latestTech.data.date)}</time>
+            <h3>{latestTech.data.title}</h3>
+            <p class="excerpt">{techExcerpt}</p>
+            <a class="diary-more" href={`/tech/${latestTech.id}/`}>→ つづきを読む</a>
+            <a class="diary-more" href="/tech/" style="margin-left:12px">→ バックログ</a>
+          </div>
+        </section>
+      )}
+
+      {latestGame && (
+        <section class="block sec-game">
+          <SectionHead icon="🎮" title="さいきんのゲーム" en="GAME" />
+          <div class="diary-card">
+            <time datetime={iso(latestGame.data.date)}>{fmt(latestGame.data.date)}</time>
+            <h3>{latestGame.data.title}</h3>
+            <p class="excerpt">{gameExcerpt}</p>
+            <a class="diary-more" href={`/game/${latestGame.id}/`}>→ つづきを読む</a>
+            <a class="diary-more" href="/game/" style="margin-left:12px">→ バックログ</a>
+          </div>
+        </section>
+      )}
+
+      {latest && (
+        <section class="block sec-diary">
+          <SectionHead icon="📝" title="さいきんの日記" en="DIARY" />
+          <div class="diary-card">
+            <time datetime={iso(latest.data.date)}>{fmt(latest.data.date)}</time>
+            <h3>{latest.data.title}</h3>
+            <p class="excerpt">{excerpt}</p>
+            <a class="diary-more" href={`/diary/${latest.id}/`}>→ つづきを読む</a>
+            <a class="diary-more" href="/diary/" style="margin-left:12px">→ バックログ</a>
+            <Calendar />
+          </div>
+        </section>
+      )}
+    </div>
   )}
   </div>
 </Base>

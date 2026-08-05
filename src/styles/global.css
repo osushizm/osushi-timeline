@@ -248,12 +248,19 @@ footer.site .plates{font-size:16px;letter-spacing:.4em;margin-bottom:6px}
   /* 横幅いっぱい使うセクション */
   .now-grid .sec-dishes,
   .now-grid .sec-piles,
-  .now-grid .sec-diary{grid-column:1 / -1}
+  .now-grid .sec-previews{grid-column:1 / -1}
   /* お品書き・積読も入るぶんだけ横に並ぶ */
   .sec-dishes .menu-grid{grid-template-columns:repeat(auto-fit, minmax(240px, 1fr))}
   .sec-piles .tsundoku{grid-template-columns:repeat(auto-fit, minmax(300px, 1fr))}
   .sec-ranks .ranks{grid-template-columns:1fr}
   .now-grid .keyword{padding:30px 20px}
+  /* テック/ゲーム/日記の最新プレビューは常に横並びのグループにする */
+  .sec-previews{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+    column-gap:28px;
+    align-items:start;
+  }
   /* 日記の本文は広げすぎると読みにくいので、カード自体は中央で上限を持つ(単体の日記ページにも適用) */
   .diary-card{max-width:920px;margin-inline:auto}
   /* レーンの寿司の間隔も画面幅にあわせて広がる */
