@@ -11,8 +11,17 @@ jobs:
     steps:
       - name: Trigger Cloudflare Pages deploy hook
         run: |
-          if [ -n "${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}" ]; then
-            curl -sf -X POST "${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}"
-          else
+          HOOK="${{ secrets.CLOUDFLARE_DEPLOY_HOOK }}"
+          if [ -z "$HOOK" ]; then
             echo "CLOUDFLARE_DEPLOY_HOOK が未設定です"
+            exit 0
           fi
+          echo "HOOK length: ${#HOOK}"
+          case "$HOOK" in
+            https://*) ;;
+            *)
+              echo "::error::CLOUDFLARE_DEPLOY_HOOK が https:// で始まっていません。前後に空白・改行・引用符が混ざっていないか、Settings > Secrets and variables > Actions で値を確認・再登録してください。"
+              exit 1
+              ;;
+          esac
+          curl -sf -X POST "$HOOK"
